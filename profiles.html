@@ -76,7 +76,7 @@
 .story-card .summary,
 .profile-header .info .bio,
 .friends-intro .sub,
-.repost-item .repost-commentary,
+.repost-item .repost-commentary-inline,
 .shelf-one-pick .shelf-note,
 .shelf-list-item .shelf-note,
 .shelf-glad .shelf-note,
@@ -470,7 +470,9 @@ img { display: block; max-width: 100%; }
 .profile-list-item .img-side img,
 .repost-item .article-stub .stub-img img,
 .shelf-one-pick .shelf-img img,
-.shelf-list-item .shelf-thumb img {
+.shelf-list-item .shelf-thumb img,
+.shelf-duo-strip img,
+.shelf-passage-item .shelf-strip-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1098,48 +1100,36 @@ img { display: block; max-width: 100%; }
 }
 .btn-secondary:hover { background: var(--nyt-bg-alt); }
 
-.privacy-toggle {
+.privacy-dropdown {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
   font-size: 12px;
   color: var(--nyt-text-meta);
+  padding: 8px 12px;
+  border: 1px solid var(--nyt-border);
+  border-radius: 4px;
+  background: white;
 }
-.privacy-toggle .switch {
-  width: 32px; height: 18px; background: var(--nyt-border); border-radius: 999px;
-  position: relative; cursor: pointer; transition: background 0.15s;
+.privacy-dropdown-label {
+  white-space: nowrap;
 }
-.privacy-toggle .switch::after {
-  content: ''; position: absolute; top: 2px; left: 2px;
-  width: 14px; height: 14px; border-radius: 50%; background: white;
-  transition: transform 0.15s;
-}
-.privacy-toggle .switch.on { background: var(--nyt-friends-accent); }
-.privacy-toggle .switch.on::after { transform: translateX(14px); }
-.privacy-toggle .privacy-label {
+.privacy-select {
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 600;
   color: var(--nyt-text);
-}
-.visibility-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: flex-end;
-  margin-bottom: 8px;
-}
-.visibility-row button {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  color: var(--nyt-text-meta);
-  background: none;
   border: none;
+  background: transparent;
   cursor: pointer;
-  text-align: right;
-  padding: 0;
+  padding: 0 16px 0 0;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23666' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
 }
-.visibility-row button:hover { color: var(--nyt-text); }
-.visibility-row button strong { color: var(--nyt-text); font-weight: 600; }
+.privacy-select:focus { outline: none; }
 
 /* Reader profile shelf (Layout A) */
 .profile-shelf {
@@ -1229,11 +1219,52 @@ img { display: block; max-width: 100%; }
   font-family: var(--font-display);
   font-style: italic;
 }
-.shelf-glad {
-  margin-bottom: 28px;
+.shelf-duo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.shelf-duo-grid.solo {
+  grid-template-columns: 1fr;
+}
+.shelf-duo-card {
   padding: 16px 18px;
   background: var(--nyt-bg-alt);
-  border-left: 3px solid var(--nyt-text-faded);
+  border: 1px solid var(--nyt-border);
+  min-height: 120px;
+}
+.shelf-duo-card .shelf-section-title {
+  margin-bottom: 12px;
+}
+.shelf-duo-strip {
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
+}
+.shelf-duo-card .shelf-passage-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0;
+}
+.shelf-duo-card .shelf-passage-item .shelf-strip-thumb {
+  width: 64px;
+  height: 42px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
+}
+.shelf-duo-card .shelf-passage-item .passage-body {
+  min-width: 0;
+}
+.shelf-duo-card .shelf-passage-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.shelf-glad {
   cursor: pointer;
 }
 .shelf-glad:hover .shelf-title { color: var(--nyt-link-hover); }
@@ -1250,7 +1281,6 @@ img { display: block; max-width: 100%; }
   color: var(--nyt-text-light);
   line-height: 1.4;
 }
-.shelf-passages { margin-bottom: 28px; }
 .shelf-passage-item {
   padding: 14px 0;
   border-bottom: 1px solid var(--nyt-border);
@@ -1274,33 +1304,6 @@ img { display: block; max-width: 100%; }
   letter-spacing: 0.05em;
   color: var(--nyt-blue);
   font-weight: 600;
-}
-.recently-read-block { margin-bottom: 8px; }
-.recently-read-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.recently-read-item {
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--nyt-border);
-  cursor: pointer;
-  align-items: center;
-}
-.recently-read-item:hover h4 { color: var(--nyt-link-hover); }
-.recently-read-item .recent-thumb {
-  aspect-ratio: 1 / 1;
-  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
-  overflow: hidden;
-}
-.recently-read-item h4 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 1.2;
 }
 .profile-private-notice {
   text-align: center;
@@ -1421,43 +1424,50 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
 }
 
-/* Repost card on profile */
+/* Repost list on profile */
+.repost-list { margin-top: -4px; }
 .repost-item {
-  padding: 24px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--nyt-border);
 }
-.repost-item .repost-commentary {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 16px;
-  color: var(--nyt-text);
-  padding: 10px 16px;
-  border-left: 3px solid var(--nyt-friends-accent);
-  background: var(--nyt-friends-bg);
-  margin-bottom: 14px;
-  line-height: 1.45;
-}
-.repost-item .meta-line {
+.repost-item:last-child { border-bottom: none; }
+.repost-item .repost-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin-bottom: 8px;
   font-family: var(--font-sans);
   font-size: 11px;
   color: var(--nyt-text-meta);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 12px;
+  letter-spacing: 0.04em;
 }
+.repost-item .repost-commentary-inline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--nyt-text);
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+.repost-item .repost-commentary-inline::before { content: '\201c'; }
+.repost-item .repost-commentary-inline::after { content: '\201d'; }
 .repost-item .article-stub {
   display: grid;
-  grid-template-columns: 1fr 140px;
-  gap: 16px;
+  grid-template-columns: 1fr 72px;
+  gap: 12px;
   cursor: pointer;
+  align-items: start;
 }
 .repost-item .article-stub:hover h3 { color: var(--nyt-link-hover); }
 .repost-item .article-stub h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.2;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .repost-item .article-stub .section {
   font-family: var(--font-sans);
@@ -1712,6 +1722,7 @@ img { display: block; max-width: 100%; }
   .article-headline { font-size: 32px; }
   .highlights-rail { display: none !important; }
   .shelf-one-pick { grid-template-columns: 1fr; }
+  .shelf-duo-grid { grid-template-columns: 1fr; }
   .masthead-row-inner {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -1825,14 +1836,13 @@ img { display: block; max-width: 100%; }
 // YOU (the logged-in reader):
 //   • Find the entry with isMe: true (currently 'kelvin').
 //   • Change id only if you also update every reference below:
-//     shelves, PROFILE_IMAGES, following, reposts, highlights, recentlyRead.
+//     shelves, PROFILE_IMAGES, following, reposts, highlights.
 //   • Edit name, initials (shown in nav avatar), role, bio.
 //
 // FRIENDS (readers in your group):
 //   • Edit ashley / abbey / kelvin / nati — or duplicate a reader block with a new id.
 //   • Each friend needs: id, name, initials, type: 'reader', role, bio.
-//   • isPublic: true  → visible on Friends page & profiles
-//   • isPublic: false → private (like Theo); hidden unless isMe: true
+//   • profileVisibility: 'public' | 'friends' | 'private' — who can see shelf, reposts, highlights
 //
 // JOURNALISTS (Times bylines):
 //   • Leave type: 'journalist' — they write articles, not reader shelves.
@@ -1855,56 +1865,56 @@ const users = {
     type: 'reader',
     role: 'Reader',
     bio: 'Aarushi is a sophomore at Stanford studying design, computer science, and comparative literature!',
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'marcus-halloran': {
     id: 'marcus-halloran', name: 'Marcus Halloran', initials: 'MH',
     type: 'journalist',
     role: 'Opinion Columnist',
     bio: "Marcus Halloran is an Opinion columnist writing about culture, technology, and the texture of contemporary life. He joined The Times in 2019.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'eliza-chen': {
     id: 'eliza-chen', name: 'Eliza Chen', initials: 'EC',
     type: 'journalist',
     role: 'Technology Reporter',
     bio: "Eliza Chen covers the intersection of design and engineering across the Bay Area. She is based in San Francisco.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'sarah-whitford': {
     id: 'sarah-whitford', name: 'Sarah Whitford', initials: 'SW',
     type: 'journalist',
     role: 'Business Reporter',
     bio: "Sarah Whitford writes about labor, real estate, and the American economy from a human perspective.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'priya-raghunathan': {
     id: 'priya-raghunathan', name: 'Priya Raghunathan', initials: 'PR',
     type: 'journalist',
     role: 'Style Reporter',
     bio: "Priya Raghunathan covers fashion, beauty, and the small social rituals of modern life.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'daniel-okeke': {
     id: 'daniel-okeke', name: 'Daniel Okeke', initials: 'DO',
     type: 'journalist',
     role: 'Politics Reporter',
     bio: "Daniel Okeke reports on national politics and food systems policy.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'ashley': {
     id: 'ashley', name: 'Ashley', initials: 'AS',
     type: 'reader',
     role: 'Reader',
     bio: "Stanford '28, live laugh love🥰",
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'abbey': {
     id: 'abbey', name: 'Abbey', initials: 'AB',
     type: 'reader',
     role: 'Reader',
     bio: 'Stanford student studying Design manufacturing and member of Stanford Track and Field team',
-    isPublic: true,
+    profileVisibility: 'public',
   },
   'kelvin': {
     id: 'kelvin', name: 'Kelvin', initials: 'KE',
@@ -1912,14 +1922,14 @@ const users = {
     role: 'Reader',
     bio: 'Kelvin thinks he goes to Stanford and only occasionally studies Design, designs lighting, and researchs in a lab',
     isMe: true,
-    isPublic: true,
+    profileVisibility: 'friends',
   },
   'nati': {
     id: 'nati', name: 'Nati Vergara', initials: 'NV',
     type: 'reader',
     role: 'Reader',
     bio: "Nati Vergara is a Stanford student studying Design and women's health. Originally from Lima, Peru, she is passionate about building products and communities that help people live more active and connected lives.",
-    isPublic: true,
+    profileVisibility: 'public',
   },
 };
 
@@ -2302,24 +2312,21 @@ const PROFILE_IMAGES = {
 //
 // One block per reader id (kelvin + each friend). articleId → see ARTICLES keys (a1, a2, …).
 // favoritePassageIds → highlight ids in highlights[] with matching userId.
-// visibility.shelf / recentlyRead: 'public' | 'friends' | 'private'
 //
 const shelves = {
   aarushi: {
-    onePick: { articleId: 'a1', note: 'The piece I keep sending to friends who say cities feel exhausting.' },
+    onePick: { articleId: 'a10', note: 'Vindication for everyone who has taken a meeting in a phone booth.' },
     topFive: [
-      { articleId: 'a4', note: 'Walk past these renderings every week on the way to class.' },
-      { articleId: 'a11', note: '' },
-      { articleId: 'a10', note: 'Saved for the next open-office debate.' },
-      { articleId: 'a6', note: '' },
-      { articleId: 'a8', note: 'The no-photos rule is the whole point.' },
+      { articleId: 'a4', note: 'Renderings as parallel city.' },
+      { articleId: 'a3', note: '' },
+      { articleId: 'a1', note: '' },
+      { articleId: 'a12', note: '' },
+      { articleId: 'a8', note: '' },
     ],
-    gladAnyway: { articleId: 'a7', note: 'Disagree with the premise but the reporting is sharp.' },
-    favoritePassageIds: ['hl9'],
-    recentlyRead: ['a1', 'a4', 'a11', 'a7', 'a6'],
-    visibility: { shelf: 'friends', recentlyRead: 'friends' },
-    shelfUpdatedAt: 'March 2026',
-    showRefreshNudge: false,
+    gladAnyway: { articleId: 'a2', note: 'Nostalgia I don\'t fully trust — glad I read it anyway.' },
+    favoritePassageIds: ['hl3'],
+    shelfUpdatedAt: 'May 2026',
+    showRefreshNudge: true,
   },
   ashley: {
     onePick: { articleId: 'a1', note: 'Send this to anyone who thinks parks are optional.' },
@@ -2332,8 +2339,6 @@ const shelves = {
     ],
     gladAnyway: { articleId: 'a10', note: 'I hate open offices but this changed my mind a little.' },
     favoritePassageIds: ['hl1', 'hl7'],
-    recentlyRead: ['a6', 'a11', 'a1', 'a8'],
-    visibility: { shelf: 'friends', recentlyRead: 'friends' },
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
@@ -2348,34 +2353,28 @@ const shelves = {
     ],
     gladAnyway: { articleId: 'a6', note: 'Linen propaganda — but the sociology is real.' },
     favoritePassageIds: ['hl2', 'hl4'],
-    recentlyRead: ['a5', 'a1', 'a10', 'a4'],
-    visibility: { shelf: 'public', recentlyRead: 'friends' },
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
   kelvin: {
-    onePick: { articleId: 'a10', note: 'Vindication for everyone who has taken a meeting in a phone booth.' },
+    onePick: { articleId: 'a1', note: 'The piece I keep sending to friends who say cities feel exhausting.' },
     topFive: [
-      { articleId: 'a4', note: 'Renderings as parallel city.' },
-      { articleId: 'a3', note: '' },
-      { articleId: 'a1', note: '' },
-      { articleId: 'a12', note: '' },
-      { articleId: 'a8', note: '' },
+      { articleId: 'a4', note: 'Walk past these renderings every week on the way to class.' },
+      { articleId: 'a11', note: '' },
+      { articleId: 'a10', note: 'Saved for the next open-office debate.' },
+      { articleId: 'a6', note: '' },
+      { articleId: 'a8', note: 'The no-photos rule is the whole point.' },
     ],
-    gladAnyway: { articleId: 'a2', note: 'Nostalgia I don\'t fully trust — glad I read it anyway.' },
-    favoritePassageIds: ['hl3'],
-    recentlyRead: ['a10', 'a4', 'a3', 'a1'],
-    visibility: { shelf: 'friends', recentlyRead: 'public' },
-    shelfUpdatedAt: 'May 2026',
-    showRefreshNudge: true,
+    gladAnyway: { articleId: 'a7', note: 'Disagree with the premise but the reporting is sharp.' },
+    favoritePassageIds: ['hl9'],
+    shelfUpdatedAt: 'March 2026',
+    showRefreshNudge: false,
   },
   nati: {
     onePick: null,
     topFive: [],
     gladAnyway: null,
     favoritePassageIds: ['hl8'],
-    recentlyRead: ['a8', 'a6'],
-    visibility: { shelf: 'friends', recentlyRead: 'friends' },
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
@@ -2383,44 +2382,44 @@ const shelves = {
 
 // FOLLOWING — which friends appear on your Friends page
 // Add/remove reader ids here. Must match users with type: 'reader'.
-// Private profiles (isPublic: false) won't show unless you follow them and they're in this set.
-let following = new Set(['ashley', 'abbey', 'kelvin', 'nati']);
+// Private profiles (profileVisibility: 'private') won't show unless you follow them and they're in this set.
+let following = new Set(['ashley', 'abbey', 'aarushi', 'nati']);
 
 // REPOSTS — what friends share on the Friends feed (userId = friend id, articleId = a1…)
 let reposts = [
   { id: 'r1', userId: 'ashley', articleId: 'a1', commentary: "Made me re-read the part about benches three times. Sending this to my mom.", date: 'May 22' },
   { id: 'r2', userId: 'abbey', articleId: 'a5', commentary: "This is the paper I've been waiting for someone to write.", date: 'May 21' },
-  { id: 'r3', userId: 'kelvin', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
+  { id: 'r3', userId: 'aarushi', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
   { id: 'r4', userId: 'nati', articleId: 'a8', commentary: "", date: 'May 19' },
   { id: 'r5', userId: 'ashley', articleId: 'a6', commentary: "Linen propaganda but I'm into it.", date: 'May 18' },
   { id: 'r6', userId: 'marcus-halloran', articleId: 'a11', commentary: "Wrote this one while sitting in the bookstore I was writing about.", date: 'May 11' },
   { id: 'r7', userId: 'marcus-halloran', articleId: 'a4', commentary: "Eliza's piece is the kind of reporting I wish more people did. The renderings as a 'secondary architecture' is a phrase I will be stealing.", date: 'May 18' },
   { id: 'r8', userId: 'eliza-chen', articleId: 'a10', commentary: "Companion piece to the SF renderings story in some ways — both about what architecture promises.", date: 'May 12' },
   { id: 'r9', userId: 'abbey', articleId: 'a1', commentary: "The line about 'units of throughput' is going on my office door.", date: 'May 22' },
-  { id: 'r10', userId: 'kelvin', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
+  { id: 'r10', userId: 'aarushi', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
   { id: 'r11', userId: 'ashley', articleId: 'a23', commentary: "This is literally our neighborhood. RIP my lease renewal.", date: 'May 30' },
   { id: 'r12', userId: 'abbey', articleId: 'a14', commentary: "Suddenly craving fries. Also tariffs are weird.", date: 'May 29' },
-  { id: 'r13', userId: 'kelvin', articleId: 'a13', commentary: "Did not expect NYT theology takes today but here we are.", date: 'May 29' },
+  { id: 'r13', userId: 'aarushi', articleId: 'a13', commentary: "Did not expect NYT theology takes today but here we are.", date: 'May 29' },
   { id: 'r14', userId: 'nati', articleId: 'a17', commentary: "Everyone in our lab group chat sent this within five minutes.", date: 'May 28' },
-  { id: 'r15', userId: 'aarushi', articleId: 'a22', commentary: "Going to see the movie this weekend. The article is better.", date: 'May 28' },
+  { id: 'r15', userId: 'kelvin', articleId: 'a22', commentary: "Going to see the movie this weekend. The article is better.", date: 'May 28' },
   { id: 'r16', userId: 'ashley', articleId: 'a20', commentary: "My cousin is in SC and sent me seventeen TikToks about this.", date: 'May 27' },
-  { id: 'r17', userId: 'kelvin', articleId: 'a19', commentary: "Wild week in arts funding.", date: 'May 27' },
+  { id: 'r17', userId: 'aarushi', articleId: 'a19', commentary: "Wild week in arts funding.", date: 'May 27' },
   { id: 'r18', userId: 'abbey', articleId: 'a18', commentary: "Sending this to everyone who keeps asking me about politics at dinner.", date: 'May 26' },
   { id: 'r19', userId: 'nati', articleId: 'a16', commentary: "Housing policy as design problem — saving this for class.", date: 'May 26' },
-  { id: 'r20', userId: 'aarushi', articleId: 'a18', commentary: "The headline alone is doing a lot of work.", date: 'May 25' },
+  { id: 'r20', userId: 'kelvin', articleId: 'a18', commentary: "The headline alone is doing a lot of work.", date: 'May 25' },
 ];
 
 // HIGHLIGHTS — passages friends marked up (userId = friend id; tie to shelves via favoritePassageIds)
 let highlights = [
   { id: 'hl1', userId: 'ashley', articleId: 'a1', passage: "to simply be somewhere — without consuming, producing, or performing — is somehow a misuse of space", note: "I think about this every time I sit in a coffee shop and feel like I have to buy something.", date: 'May 22' },
   { id: 'hl2', userId: 'abbey', articleId: 'a1', passage: "A generation raised inside the optimization of every minute does not develop the muscle for stillness", note: "Worth pairing with the recent attention-economy literature. Almost the same finding, different vocabulary.", date: 'May 22' },
-  { id: 'hl3', userId: 'kelvin', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
+  { id: 'hl3', userId: 'aarushi', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
   { id: 'hl4', userId: 'abbey', articleId: 'a5', passage: "They have, in a sense, never known a quiet city, and so they do not register the loud one as loud.", note: "Generational baselines as invisible infrastructure. Underrated framework.", date: 'May 21' },
   { id: 'hl5', userId: 'marcus-halloran', articleId: 'a4', passage: "a parallel city stitched onto the real one", note: "Eliza chose the perfect phrase here. This is what's so haunting about walking through downtown SF right now.", date: 'May 19' },
   { id: 'hl6', userId: 'eliza-chen', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
   { id: 'hl7', userId: 'ashley', articleId: 'a11', passage: "Something is missing, and it is not the books.", note: "Oof.", date: 'May 14' },
   { id: 'hl8', userId: 'nati', articleId: 'a8', passage: "intimacy of conversation requires the absence of an audience", note: "", date: 'May 15' },
-  { id: 'hl9', userId: 'aarushi', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
+  { id: 'hl9', userId: 'kelvin', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
 ];
 
 /* ============================================================
@@ -2520,36 +2519,40 @@ function renderProfileAvatar(u) {
 
 function canViewProfileBody(u, isMe) {
   if (isMe) return true;
-  return u.isPublic;
-}
-
-function canViewShelfSection(u, section, isMe) {
-  if (!canViewProfileBody(u, isMe)) return false;
-  if (isMe) return true;
   if (u.type === 'journalist') return true;
-  const shelf = shelves[u.id];
-  if (!shelf) return false;
-  const vis = shelf.visibility[section];
+  const vis = u.profileVisibility || 'public';
   if (vis === 'private') return false;
   if (vis === 'friends') return following.has(u.id);
   return true;
 }
 
-function cycleVisibility(uid, key) {
-  const order = ['friends', 'public', 'private'];
-  const shelf = shelves[uid];
-  if (!shelf) return;
-  const i = order.indexOf(shelf.visibility[key]);
-  shelf.visibility[key] = order[(i + 1) % order.length];
-  render();
-  const labels = { friends: 'friends only', public: 'everyone', private: 'only you' };
-  toast((key === 'shelf' ? 'Shelf' : 'Recently read') + ' visible to: ' + labels[shelf.visibility[key]]);
+function getMeUser() {
+  return Object.values(users).find(u => u.isMe);
 }
 
-function trackRecentlyRead(articleId) {
-  const shelf = shelves['kelvin'];
-  if (!shelf) return;
-  shelf.recentlyRead = [articleId, ...shelf.recentlyRead.filter(id => id !== articleId)].slice(0, 5);
+function getMeUserId() {
+  const me = getMeUser();
+  return me ? me.id : 'kelvin';
+}
+
+function renderPrivacyDropdown(u) {
+  const select = el('select', {
+    class: 'privacy-select',
+    onchange: (e) => {
+      u.profileVisibility = e.target.value;
+      render();
+      toast('Profile is now ' + e.target.value);
+    },
+  });
+  ['public', 'friends', 'private'].forEach(v => {
+    const opt = el('option', { value: v }, v.charAt(0).toUpperCase() + v.slice(1));
+    if ((u.profileVisibility || 'public') === v) opt.selected = true;
+    select.appendChild(opt);
+  });
+  return el('div', { class: 'privacy-dropdown' },
+    el('span', { class: 'privacy-dropdown-label' }, 'Profile is'),
+    select
+  );
 }
 
 function getFollowedReaders() {
@@ -2647,8 +2650,7 @@ function renderProfileShelf(u, isMe) {
   if (!shelf || u.type === 'journalist') return null;
 
   const wrap = el('div', { class: 'profile-shelf' });
-  const showShelf = canViewShelfSection(u, 'shelf', isMe);
-  const showRecent = canViewShelfSection(u, 'recentlyRead', isMe);
+  const showShelf = canViewProfileBody(u, isMe);
 
   if (isMe && shelf.showRefreshNudge) {
     wrap.appendChild(el('div', { class: 'shelf-refresh-nudge' },
@@ -2694,48 +2696,47 @@ function renderProfileShelf(u, isMe) {
       wrap.appendChild(block);
     }
 
-    if (shelf.gladAnyway && articles[shelf.gladAnyway.articleId]) {
-      const a = articles[shelf.gladAnyway.articleId];
-      wrap.appendChild(el('div', { class: 'shelf-section' },
-        el('div', { class: 'shelf-section-title' }, 'Glad I read it anyway'),
-        el('div', { class: 'shelf-glad', onclick: () => navigate('article', { articleId: a.id }) },
-          el('div', { class: 'shelf-title' }, a.title),
-          shelf.gladAnyway.note ? el('div', { class: 'shelf-note' }, shelf.gladAnyway.note) : null
-        )
-      ));
-    }
+    if (shelf.gladAnyway && articles[shelf.gladAnyway.articleId] ||
+        (shelf.favoritePassageIds && shelf.favoritePassageIds.length)) {
+      const hasGlad = shelf.gladAnyway && articles[shelf.gladAnyway.articleId];
+      const hasPassages = shelf.favoritePassageIds && shelf.favoritePassageIds.length;
+      const duo = el('div', { class: 'shelf-duo-grid' + (hasGlad && hasPassages ? '' : ' solo') });
 
-    if (shelf.favoritePassageIds && shelf.favoritePassageIds.length) {
-      const block = el('div', { class: 'shelf-section shelf-passages' });
-      block.appendChild(el('div', { class: 'shelf-section-title' }, 'Passages I keep thinking about'));
-      shelf.favoritePassageIds.forEach(hid => {
-        const hl = highlights.find(h => h.id === hid && h.userId === u.id);
-        if (!hl) return;
-        const a = articles[hl.articleId];
-        if (!a) return;
-        block.appendChild(el('div', { class: 'shelf-passage-item', onclick: () => navigate('article', { articleId: a.id }) },
-          el('div', { class: 'passage-text' }, '\u201c' + hl.passage + '\u201d'),
-          el('div', { class: 'passage-source' }, 'From \u201c' + a.title + '\u201d')
-        ));
-      });
-      wrap.appendChild(block);
-    }
-  }
+      if (hasGlad) {
+        const gladArt = articles[shelf.gladAnyway.articleId];
+        const gladCard = el('div', { class: 'shelf-duo-card' },
+          el('div', { class: 'shelf-section-title' }, 'Glad I read it anyway'),
+          el('div', { class: 'shelf-glad', onclick: () => navigate('article', { articleId: gladArt.id }) },
+            renderArticleThumb('shelf-duo-strip', gladArt.id),
+            el('div', { class: 'shelf-title' }, gladArt.title),
+            shelf.gladAnyway.note ? el('div', { class: 'shelf-note' }, shelf.gladAnyway.note) : null
+          )
+        );
+        duo.appendChild(gladCard);
+      }
 
-  if (showRecent && shelf.recentlyRead && shelf.recentlyRead.length) {
-    const block = el('div', { class: 'shelf-section recently-read-block' });
-    block.appendChild(el('div', { class: 'shelf-section-title' }, 'Recently read'));
-    const list = el('div', { class: 'recently-read-list' });
-    shelf.recentlyRead.forEach(aid => {
-      const a = articles[aid];
-      if (!a) return;
-      list.appendChild(el('div', { class: 'recently-read-item', onclick: () => navigate('article', { articleId: a.id }) },
-        renderArticleThumb('recent-thumb', a.id),
-        el('h4', {}, a.title)
-      ));
-    });
-    block.appendChild(list);
-    wrap.appendChild(block);
+      if (hasPassages) {
+        const passCard = el('div', { class: 'shelf-duo-card' },
+          el('div', { class: 'shelf-section-title' }, 'Passages I keep thinking about')
+        );
+        shelf.favoritePassageIds.forEach(hid => {
+          const hl = highlights.find(h => h.id === hid && h.userId === u.id);
+          if (!hl) return;
+          const passArt = articles[hl.articleId];
+          if (!passArt) return;
+          passCard.appendChild(el('div', { class: 'shelf-passage-item', onclick: () => navigate('article', { articleId: passArt.id }) },
+            renderArticleThumb('shelf-strip-thumb', passArt.id),
+            el('div', { class: 'passage-body' },
+              el('div', { class: 'passage-text' }, '\u201c' + hl.passage + '\u201d'),
+              el('div', { class: 'passage-source' }, 'From \u201c' + passArt.title + '\u201d')
+            )
+          ));
+        });
+        duo.appendChild(passCard);
+      }
+
+      wrap.appendChild(duo);
+    }
   }
 
   if (!wrap.childNodes.length) return null;
@@ -2754,7 +2755,6 @@ function navigate(view, opts = {}) {
   if (view === 'article') {
     state.currentArticleId = opts.articleId;
     state.highlightMode = false;
-    trackRecentlyRead(opts.articleId);
   }
   if (view === 'profile') {
     state.currentProfileId = opts.profileId;
@@ -2972,8 +2972,7 @@ function renderFriendsFeed() {
   primary.appendChild(grid);
   wrap.appendChild(primary);
 
-  const shelfFriends = readers.filter(u => shelves[u.id] && shelfHasContent(shelves[u.id]) &&
-    canViewShelfSection(u, 'shelf', false));
+  const shelfFriends = readers.filter(u => shelves[u.id] && shelfHasContent(shelves[u.id]));
   if (shelfFriends.length) {
     const secondary = el('div', { class: 'friends-zone friends-zone-secondary' });
     secondary.appendChild(renderFriendsSubsectionHeader(
@@ -3119,7 +3118,7 @@ function applyHighlights(paragraph, articleId) {
     const safeNeedle = escapeHtml(hl.passage);
     const u = users[hl.userId];
     if (!u) return;
-    const isMine = hl.userId === 'kelvin';
+    const isMine = hl.userId === getMeUserId();
     const mark = `<span class="highlight-mark" data-mine="${isMine}" title="${escapeHtml(u.name)}${hl.note ? ': ' + escapeHtml(hl.note) : ''}">${safeNeedle}</span>`;
     html = html.split(safeNeedle).join(mark);
   });
@@ -3171,37 +3170,12 @@ function renderProfile() {
   }
   stats.appendChild(el('div', {}, el('strong', {}, String(userReposts.length)), ' reposts'));
   stats.appendChild(el('div', {}, el('strong', {}, String(userHighlights.length)), ' highlights'));
-  if (!isMe) stats.appendChild(el('div', {}, el('strong', {}, isFollowing ? '1.2k+' : '1.2k'), ' followers'));
   info.appendChild(stats);
   header.appendChild(info);
 
   const actions = el('div', { class: 'actions' });
   if (isMe) {
-    const tog = el('div', { class: 'privacy-toggle' },
-      el('span', {}, 'Profile is'),
-      el('span', { class: 'privacy-label' }, u.isPublic ? 'public' : 'private'),
-      el('div', {
-        class: 'switch' + (u.isPublic ? ' on' : ''),
-        onclick: () => { u.isPublic = !u.isPublic; render(); toast('Profile is now ' + (u.isPublic ? 'public' : 'private')); }
-      })
-    );
-    actions.appendChild(tog);
-    if (u.type === 'reader' && shelves[u.id]) {
-      const vis = shelves[u.id].visibility;
-      actions.appendChild(el('div', { class: 'visibility-row' },
-        el('button', { onclick: () => cycleVisibility(u.id, 'shelf') },
-          'Shelf: ', el('strong', {}, vis.shelf)
-        ),
-        el('button', { onclick: () => cycleVisibility(u.id, 'recentlyRead') },
-          'Recently read: ', el('strong', {}, vis.recentlyRead)
-        )
-      ));
-    }
-    actions.appendChild(el('div', {
-      style: 'font-family: var(--font-sans); font-size: 11px; color: var(--nyt-text-meta); max-width: 220px; text-align: right; line-height: 1.4;'
-    }, u.isPublic
-      ? 'Friends who follow you can see your shelf, reposts, and highlights (per visibility toggles).'
-      : 'Only you can see what you read, repost, and highlight.'));
+    actions.appendChild(renderPrivacyDropdown(u));
   } else {
     actions.appendChild(el('button', {
       class: 'btn-follow' + (isFollowing ? ' following' : ''),
@@ -3240,7 +3214,11 @@ function renderProfile() {
   }
   if (state.profileTab === 'reposts') {
     if (!userReposts.length) content.appendChild(emptyState(isMe ? "You haven't reposted anything yet. Open an article and try the Repost button." : "Nothing reposted yet."));
-    userReposts.forEach(rp => content.appendChild(renderRepostItem(rp)));
+    else {
+      const list = el('div', { class: 'repost-list' });
+      userReposts.forEach(rp => list.appendChild(renderRepostItem(rp)));
+      content.appendChild(list);
+    }
   }
   if (state.profileTab === 'highlights') {
     if (!userHighlights.length) content.appendChild(emptyState(isMe ? "You haven't highlighted anything yet. Open an article, click Highlight, and select a passage." : "Nothing highlighted yet."));
@@ -3279,10 +3257,13 @@ function renderRepostItem(rp) {
   const a = articles[rp.articleId];
   if (!a) return el('div');
   const item = el('div', { class: 'repost-item' });
-  item.appendChild(el('div', { class: 'meta-line' }, '↻ Reposted · ' + rp.date));
+  const meta = el('div', { class: 'repost-meta-row' },
+    el('span', {}, '\u21bb ' + rp.date)
+  );
   if (rp.commentary) {
-    item.appendChild(el('div', { class: 'repost-commentary' }, '"' + rp.commentary + '"'));
+    meta.appendChild(el('span', { class: 'repost-commentary-inline' }, rp.commentary));
   }
+  item.appendChild(meta);
   item.appendChild(el('div', { class: 'article-stub', onclick: () => navigate('article', { articleId: a.id }) },
     el('div', {},
       el('div', { class: 'section' }, a.section),
@@ -3377,7 +3358,7 @@ function submitHighlight() {
   if (!passage) { closeModal('highlight-modal'); return; }
   const newHl = {
     id: 'hl_' + Date.now(),
-    userId: 'kelvin',
+    userId: getMeUserId(),
     articleId: state.currentArticleId,
     passage,
     note,
@@ -3405,7 +3386,7 @@ function submitRepost() {
   if (!articleId) { closeModal('repost-modal'); return; }
   const newRp = {
     id: 'r_' + Date.now(),
-    userId: 'kelvin',
+    userId: getMeUserId(),
     articleId,
     commentary,
     date: 'May 23',
@@ -3427,8 +3408,8 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 });
 
 // Header avatar → own profile
-const meUser = Object.values(users).find(u => u.isMe);
-$('header-avatar').addEventListener('click', () => navigate('profile', { profileId: meUser ? meUser.id : 'kelvin' }));
+const meUser = getMeUser();
+$('header-avatar').addEventListener('click', () => navigate('profile', { profileId: getMeUserId() }));
 
 /* ============================================================
    INIT
