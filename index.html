@@ -121,14 +121,16 @@ img { display: block; max-width: 100%; }
   border-bottom: 1px solid var(--nyt-border);
 }
 .masthead .logo {
-  font-family: var(--font-blackletter);
-  font-weight: 700;
-  font-size: 56px;
-  letter-spacing: 0;
-  line-height: 1;
-  color: var(--nyt-black);
   cursor: pointer;
   user-select: none;
+  display: block;
+  line-height: 0;
+}
+.masthead .logo img {
+  display: block;
+  width: min(100%, 380px);
+  height: auto;
+  margin: 0 auto;
 }
 .masthead .date-line {
   margin-top: 10px;
@@ -1277,7 +1279,9 @@ img { display: block; max-width: 100%; }
 
 <!-- MASTHEAD -->
 <div class="masthead">
-  <div class="logo" onclick="navigate('home')">The New York Times</div>
+  <div class="logo" onclick="navigate('home')">
+    <img src="assets/The_New_York_Times_logo.png" alt="The New York Times" width="380" height="56">
+  </div>
   <div class="date-line" id="masthead-date"></div>
 </div>
 
@@ -1351,7 +1355,7 @@ const users = {
     id: 'aarushi', name: 'Aarushi Kumar', initials: 'AK',
     type: 'reader',
     role: 'Reader',
-    bio: 'Junior at Stanford. Reading mostly about cities, design, and the long, weird tail of the internet.',
+    bio: 'Aarushi is a sophomore at Stanford studying design, computer science, and comparative literature!',
     isMe: true,
     isPublic: true,
   },
@@ -1390,33 +1394,33 @@ const users = {
     bio: "Daniel Okeke reports on national politics and food systems policy.",
     isPublic: true,
   },
-  'bree': {
-    id: 'bree', name: 'Bree Sandoval', initials: 'BS',
+  'ashley': {
+    id: 'ashley', name: 'Ashley', initials: 'AS',
     type: 'reader',
     role: 'Reader',
-    bio: 'Design student, infrequent annotator, prolific reposter. Mostly read Style and Opinion.',
+    bio: "Stanford '28, live laugh love🥰",
     isPublic: true,
   },
-  'devin': {
-    id: 'devin', name: 'Devin Park', initials: 'DP',
+  'abbey': {
+    id: 'abbey', name: 'Abbey', initials: 'AB',
     type: 'reader',
     role: 'Reader',
-    bio: 'Sociology PhD. Marks up every long read like a paper draft.',
+    bio: 'Stanford student studying Design manufacturing and member of Stanford Track and Field team',
     isPublic: true,
   },
-  'maya': {
-    id: 'maya', name: 'Maya Okonkwo', initials: 'MO',
+  'kelvin': {
+    id: 'kelvin', name: 'Kelvin', initials: 'KE',
     type: 'reader',
     role: 'Reader',
-    bio: 'Software engineer. Reads more Opinion than I should admit.',
+    bio: 'Kelvin thinks he goes to Stanford and only occasionally studies Design, designs lighting, and researchs in a lab...',
     isPublic: true,
   },
-  'theo': {
-    id: 'theo', name: 'Theo Marchetti', initials: 'TM',
+  'nati': {
+    id: 'nati', name: 'Nati Vergara', initials: 'NV',
     type: 'reader',
     role: 'Reader',
-    bio: "Film school. Style and Arts, mostly. Things I'd talk about at dinner.",
-    isPublic: false,
+    bio: "Nati Vergara is a Stanford student studying Design and women's health. Originally from Lima, Peru, she is passionate about building products and communities that help people live more active and connected lives.",
+    isPublic: true,
   },
 };
 
@@ -1612,32 +1616,32 @@ const articles = {
 };
 
 // FOLLOWING — who Aarushi follows (and friend relationships)
-let following = new Set(['marcus-halloran', 'eliza-chen', 'bree', 'devin', 'maya', 'theo']);
+let following = new Set(['marcus-halloran', 'eliza-chen', 'ashley', 'abbey', 'kelvin', 'nati']);
 
 // REPOSTS — array of { id, userId, articleId, commentary, date }
 let reposts = [
-  { id: 'r1', userId: 'bree', articleId: 'a1', commentary: "Made me re-read the part about benches three times. Sending this to my mom.", date: 'May 22' },
-  { id: 'r2', userId: 'devin', articleId: 'a5', commentary: "This is the paper I've been waiting for someone to write.", date: 'May 21' },
-  { id: 'r3', userId: 'maya', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
-  { id: 'r4', userId: 'theo', articleId: 'a8', commentary: "", date: 'May 19' },
-  { id: 'r5', userId: 'bree', articleId: 'a6', commentary: "Linen propaganda but I'm into it.", date: 'May 18' },
+  { id: 'r1', userId: 'ashley', articleId: 'a1', commentary: "Made me re-read the part about benches three times. Sending this to my mom.", date: 'May 22' },
+  { id: 'r2', userId: 'abbey', articleId: 'a5', commentary: "This is the paper I've been waiting for someone to write.", date: 'May 21' },
+  { id: 'r3', userId: 'kelvin', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
+  { id: 'r4', userId: 'nati', articleId: 'a8', commentary: "", date: 'May 19' },
+  { id: 'r5', userId: 'ashley', articleId: 'a6', commentary: "Linen propaganda but I'm into it.", date: 'May 18' },
   { id: 'r6', userId: 'marcus-halloran', articleId: 'a11', commentary: "Wrote this one while sitting in the bookstore I was writing about.", date: 'May 11' },
   { id: 'r7', userId: 'marcus-halloran', articleId: 'a4', commentary: "Eliza's piece is the kind of reporting I wish more people did. The renderings as a 'secondary architecture' is a phrase I will be stealing.", date: 'May 18' },
   { id: 'r8', userId: 'eliza-chen', articleId: 'a10', commentary: "Companion piece to the SF renderings story in some ways — both about what architecture promises.", date: 'May 12' },
-  { id: 'r9', userId: 'devin', articleId: 'a1', commentary: "The line about 'units of throughput' is going on my office door.", date: 'May 22' },
-  { id: 'r10', userId: 'maya', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
+  { id: 'r9', userId: 'abbey', articleId: 'a1', commentary: "The line about 'units of throughput' is going on my office door.", date: 'May 22' },
+  { id: 'r10', userId: 'kelvin', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
 ];
 
 // ANNOTATIONS — array of { id, userId, articleId, passage, note, date }
 let annotations = [
-  { id: 'an1', userId: 'bree', articleId: 'a1', passage: "to simply be somewhere — without consuming, producing, or performing — is somehow a misuse of space", note: "I think about this every time I sit in a coffee shop and feel like I have to buy something.", date: 'May 22' },
-  { id: 'an2', userId: 'devin', articleId: 'a1', passage: "A generation raised inside the optimization of every minute does not develop the muscle for stillness", note: "Worth pairing with the recent attention-economy literature. Almost the same finding, different vocabulary.", date: 'May 22' },
-  { id: 'an3', userId: 'maya', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
-  { id: 'an4', userId: 'devin', articleId: 'a5', passage: "They have, in a sense, never known a quiet city, and so they do not register the loud one as loud.", note: "Generational baselines as invisible infrastructure. Underrated framework.", date: 'May 21' },
+  { id: 'an1', userId: 'ashley', articleId: 'a1', passage: "to simply be somewhere — without consuming, producing, or performing — is somehow a misuse of space", note: "I think about this every time I sit in a coffee shop and feel like I have to buy something.", date: 'May 22' },
+  { id: 'an2', userId: 'abbey', articleId: 'a1', passage: "A generation raised inside the optimization of every minute does not develop the muscle for stillness", note: "Worth pairing with the recent attention-economy literature. Almost the same finding, different vocabulary.", date: 'May 22' },
+  { id: 'an3', userId: 'kelvin', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
+  { id: 'an4', userId: 'abbey', articleId: 'a5', passage: "They have, in a sense, never known a quiet city, and so they do not register the loud one as loud.", note: "Generational baselines as invisible infrastructure. Underrated framework.", date: 'May 21' },
   { id: 'an5', userId: 'marcus-halloran', articleId: 'a4', passage: "a parallel city stitched onto the real one", note: "Eliza chose the perfect phrase here. This is what's so haunting about walking through downtown SF right now.", date: 'May 19' },
   { id: 'an6', userId: 'eliza-chen', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
-  { id: 'an7', userId: 'bree', articleId: 'a11', passage: "Something is missing, and it is not the books.", note: "Oof.", date: 'May 14' },
-  { id: 'an8', userId: 'theo', articleId: 'a8', passage: "intimacy of conversation requires the absence of an audience", note: "", date: 'May 15' },
+  { id: 'an7', userId: 'ashley', articleId: 'a11', passage: "Something is missing, and it is not the books.", note: "Oof.", date: 'May 14' },
+  { id: 'an8', userId: 'nati', articleId: 'a8', passage: "intimacy of conversation requires the absence of an audience", note: "", date: 'May 15' },
 ];
 
 /* ============================================================

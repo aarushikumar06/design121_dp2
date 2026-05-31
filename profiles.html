@@ -6,7 +6,7 @@
 <title>The New York Times — Profiles Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Playfair+Display:wght@700;900&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    NYT-style prototype
@@ -43,6 +43,14 @@
 
   --max-w: 1280px;
   --pad: 20px;
+
+  /* Friends page spacing scale (8px base rhythm) */
+  --friends-space-1: 8px;   /* micro — meta gaps, tight stacks */
+  --friends-space-2: 12px;  /* tight — card padding, header gap */
+  --friends-space-3: 16px;  /* base — titles, decks, grid gutters */
+  --friends-space-4: 24px;  /* block — row gaps, shelf cards */
+  --friends-space-5: 32px;  /* section — masthead clearance */
+  --friends-space-6: 48px;  /* zone — major bands (feed → shelves) */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -92,115 +100,154 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 img { display: block; max-width: 100%; }
 
 /* ============================================================
-   TOP UTILITY BAR
+   SITE HEADER (NYT-style: 3 rows + double rule)
    ============================================================ */
-.utility-bar {
-  border-bottom: 1px solid var(--nyt-border);
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.04em;
+.site-header {
+  background: var(--nyt-bg);
+  border-bottom: none;
 }
-.utility-bar-inner {
+
+/* Row 1 — search, editions, account */
+.header-top {
+  border-bottom: 1px solid var(--nyt-border);
+}
+.header-top-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 8px var(--pad);
+  padding: 10px var(--pad);
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+}
+.header-search {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  color: var(--nyt-black);
+}
+.header-search svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.header-editions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--font-meta);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nyt-text);
+}
+.header-editions a {
+  color: inherit;
+}
+.header-editions a:hover { color: var(--nyt-text-meta); }
+.header-editions .edition-active {
+  font-weight: 700;
+}
+.header-account {
+  display: flex;
+  justify-content: flex-end;
+}
+.header-account .account {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--nyt-black);
+  color: white;
+  font-family: var(--font-meta);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0;
+}
+.header-account .account:hover { opacity: 0.85; }
+
+/* Row 2 — date, logo, market */
+.masthead-row {
+  padding: 18px var(--pad) 14px;
+}
+.masthead-row-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  color: var(--nyt-text-light);
+  gap: 24px;
 }
-.utility-left { display: flex; gap: 14px; }
-.utility-left a { text-transform: none; }
-.utility-center { text-transform: uppercase; letter-spacing: 0.05em; }
-.utility-right { display: flex; justify-content: flex-end; gap: 14px; align-items: center; }
-.utility-right .account {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--nyt-black); color: white;
-  font-size: 10px; font-weight: 700; cursor: pointer;
+.masthead-left {
+  justify-self: start;
+  font-family: var(--font-body);
+  color: var(--nyt-text);
 }
-
-/* ============================================================
-   SUBSCRIBE BANNER (thin, just for vibe)
-   ============================================================ */
-.sub-banner {
-  background: var(--nyt-bg);
-  border-bottom: 1px solid var(--nyt-border);
-  font-family: var(--font-sans);
-  font-size: 12px;
+.masthead-date {
+  font-size: 13px;
+  line-height: 1.35;
+  margin-bottom: 2px;
 }
-.sub-banner-inner {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 6px var(--pad);
-  display: flex;
-  gap: 12px;
-  align-items: center;
+.masthead-paper {
+  font-family: var(--font-meta);
+  font-size: 11px;
+  color: var(--nyt-text);
+  letter-spacing: 0.01em;
 }
-.sub-banner-inner .btn-sub {
-  background: var(--nyt-blue); color: white;
-  padding: 4px 10px; font-weight: 600;
-  font-size: 11px; letter-spacing: 0.02em;
-}
-.sub-banner-inner .btn-login {
-  border: 1px solid var(--nyt-border-strong);
-  padding: 3px 10px; font-weight: 500;
-  background: white;
-}
-
-/* ============================================================
-   MASTHEAD
-   ============================================================ */
-.masthead {
-  text-align: center;
-  padding: 14px var(--pad) 8px;
-  border-bottom: 1px solid var(--nyt-border);
-}
-.masthead .logo {
-  font-family: var(--font-headline);
-  font-weight: 700;
-  font-size: 42px;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--nyt-black);
+.masthead-paper:hover { color: var(--nyt-text-meta); }
+.masthead-row .logo {
   cursor: pointer;
   user-select: none;
+  display: block;
+  line-height: 0;
+  justify-self: center;
 }
-.masthead .date-line {
-  margin-top: 10px;
-  font-family: var(--font-sans);
+.masthead-row .logo img {
+  display: block;
+  width: min(72vw, 440px);
+  height: auto;
+  margin: 0 auto;
+}
+.masthead-market {
+  justify-self: end;
+  text-align: right;
+  font-family: var(--font-meta);
   font-size: 11px;
-  letter-spacing: 0.03em;
-  color: var(--nyt-text-meta);
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
+  line-height: 1.35;
+  color: var(--nyt-text-faded);
+  white-space: nowrap;
 }
-.masthead .date-line .dot { width: 3px; height: 3px; background: var(--nyt-text-meta); border-radius: 50%; display: inline-block; }
+.masthead-market .market-change.up {
+  color: #6b8e6b;
+}
 
-/* ============================================================
-   SECTION NAV
-   ============================================================ */
+/* Row 3 — section nav */
 .section-nav {
-  border-top: 1px solid var(--nyt-border-strong);
-  border-bottom: 1px solid var(--nyt-border-strong);
+  border-top: none;
+  border-bottom: none;
+  padding: 0 var(--pad) 12px;
 }
 .section-nav-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 var(--pad);
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 0;
-  font-family: var(--font-sans);
-  font-size: 14px;
+  flex-wrap: wrap;
+  gap: 0 2px;
+  font-family: var(--font-meta);
+  font-size: 13px;
 }
-.section-nav-inner a, .section-nav-inner button {
-  padding: 11px 12px;
+.section-nav-inner a,
+.section-nav-inner button {
+  padding: 8px 10px;
   color: var(--nyt-text);
-  font-weight: 500;
+  font-weight: 400;
   font-family: inherit;
   font-size: inherit;
   white-space: nowrap;
@@ -208,24 +255,41 @@ img { display: block; max-width: 100%; }
   background: none;
   cursor: pointer;
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
 }
-.section-nav-inner a:hover, .section-nav-inner button:hover { color: var(--nyt-text-meta); }
+.section-nav-inner a:hover,
+.section-nav-inner button:hover { color: var(--nyt-text-meta); }
+.section-nav-inner .nav-chev {
+  font-size: 8px;
+  line-height: 1;
+  color: var(--nyt-text-meta);
+  margin-top: 1px;
+}
 .section-nav-inner .nav-active {
   color: var(--nyt-black);
   font-weight: 700;
 }
 .section-nav-inner .nav-active::after {
-  content: '';
-  position: absolute;
-  left: 12px; right: 12px; bottom: -1px;
-  height: 3px;
-  background: var(--nyt-black);
+  content: none;
 }
 .section-nav .nav-friends {
   color: var(--nyt-friends-accent) !important;
   font-style: italic;
+  font-weight: 600;
 }
-.section-nav .nav-friends.nav-active::after { background: var(--nyt-friends-accent); }
+
+/* Double rule below header */
+.header-rule-double {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad) 0;
+  height: 5px;
+  background:
+    linear-gradient(var(--nyt-black), var(--nyt-black)) 0 0 / 100% 1px no-repeat,
+    linear-gradient(var(--nyt-black), var(--nyt-black)) 0 4px / 100% 1px no-repeat;
+}
 
 /* ============================================================
    PAGE CONTAINER
@@ -246,6 +310,66 @@ img { display: block; max-width: 100%; }
   border-bottom: 1px solid var(--nyt-border);
   padding-bottom: 24px;
   margin-bottom: 24px;
+}
+.home-grid-feature {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.home-col-features .story-card h2 {
+  font-size: 28px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.home-col-sidebar { padding-left: 22px; }
+.home-sidebar-block {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--nyt-border);
+}
+.home-sidebar-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sidebar-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--nyt-black);
+}
+.story-static h1,
+.story-static h2,
+.story-static h3 { cursor: default; }
+.story-static h1:hover,
+.story-static h2:hover,
+.story-static h3:hover { color: inherit; }
+.read-time {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--nyt-text-meta);
+  margin-top: 8px;
+}
+.most-shared-item {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--nyt-border);
+}
+.most-shared-item:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+.most-shared-item h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+.most-shared-item .story-img {
+  aspect-ratio: 1;
+  margin-bottom: 0;
 }
 .home-col {
   padding: 0 18px;
@@ -330,6 +454,7 @@ img { display: block; max-width: 100%; }
 }
 .story-card-small { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--nyt-border); }
 .story-card-small:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+.home-sidebar-story .story-img-small { margin-top: 0; margin-bottom: 8px; }
 
 /* Story image */
 .story-img {
@@ -397,172 +522,175 @@ img { display: block; max-width: 100%; }
 }
 
 /* ============================================================
-   FRIENDS FEED
+   FRIENDS PAGE
+   Hierarchy: L1 masthead → L2 zones → L3 cards → L4 card parts → L5 embed type
+   Spacing:   --friends-space-1 … --friends-space-6 (see :root)
    ============================================================ */
-.friends-intro {
-  border-bottom: 1px solid var(--nyt-black);
-  padding-bottom: 18px;
-  margin-bottom: 24px;
+
+/* L1 — page masthead */
+.friends-page { display: flex; flex-direction: column; }
+
+.friends-masthead {
+  margin-bottom: var(--friends-space-5);
 }
-.friends-intro h1 {
+.friends-masthead .rule-thin {
+  border: none;
+  border-top: 1px solid var(--nyt-border);
+  margin: 0;
+}
+.friends-masthead h1 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 44px;
   letter-spacing: -0.01em;
-  margin-bottom: 6px;
+  padding: var(--friends-space-3) 0;
+  line-height: 1;
 }
-.friends-intro .sub {
-  font-family: var(--font-subhead);
-  font-size: 17px;
-  color: var(--nyt-text-light);
-  max-width: 680px;
-  line-height: 1.45;
-}
-.friends-following-strip {
-  display: flex;
-  gap: 14px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--nyt-border);
-  align-items: center;
-  flex-wrap: wrap;
-}
-.friends-following-strip .label {
-  font-family: var(--font-sans);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--nyt-text-meta);
-  margin-right: 4px;
-}
-.friends-following-top {
-  background: var(--nyt-friends-bg);
-  border: 1px solid var(--nyt-border);
-  padding: 16px 20px;
-  margin-bottom: 28px;
-}
-.friends-following-top .label {
+.friends-masthead .section-tags {
   font-family: var(--font-subhead);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--nyt-text-meta);
+  letter-spacing: 0.06em;
   font-weight: 600;
-  margin-bottom: 12px;
-  display: block;
+  color: var(--nyt-text);
+  padding-top: var(--friends-space-4);
+  padding-bottom: var(--friends-space-3);
 }
-.friends-following-top .chips {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+.friends-masthead .section-tags .dot {
+  margin: 0 10px;
+  color: var(--nyt-text-meta);
+  font-weight: 400;
 }
-.friend-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  padding: 6px 14px 6px 6px;
-  border-radius: 999px;
-  background: white;
-  border: 1px solid var(--nyt-border);
-  font-family: var(--font-subhead);
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.15s, border-color 0.15s;
+.friends-masthead .rule-thick {
+  border: none;
+  border-top: 3px solid var(--nyt-black);
+  margin: 0;
 }
-.friend-chip:hover {
-  background: white;
-  border-color: var(--nyt-friends-accent);
-}
-.friend-chip .av {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--nyt-friends-accent); color: white;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700;
-  background-size: cover;
-  background-position: center;
-  flex-shrink: 0;
-}
-.friend-chip .av.has-photo { color: transparent; }
 
-.friends-section {
-  margin-bottom: 36px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--nyt-border);
+/* L2 — content zones */
+.friends-zone + .friends-zone {
+  margin-top: var(--friends-space-6);
+  padding-top: var(--friends-space-6);
+  border-top: 1px solid var(--nyt-border);
 }
-.friends-section:last-child { border-bottom: none; }
-.friends-section-title {
+
+/* L2 subsection header (shelves band) */
+.friends-subsection-header {
+  margin-bottom: var(--friends-space-4);
+  padding-bottom: var(--friends-space-2);
+  border-bottom: 1px solid var(--nyt-black);
+}
+.friends-subsection-header h2 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 22px;
-  margin-bottom: 4px;
+  line-height: 1.15;
+  margin-bottom: var(--friends-space-1);
 }
-.friends-section-deck {
+.friends-subsection-deck {
   font-family: var(--font-subhead);
   font-size: 14px;
-  color: var(--nyt-text-light);
-  margin-bottom: 18px;
-  max-width: 620px;
   line-height: 1.45;
+  color: var(--nyt-text-light);
+  max-width: 42em;
 }
 
-/* One-pick stack */
-.friends-one-picks { display: flex; flex-direction: column; gap: 0; }
-.friends-one-pick-row {
+/* L3 — repost feed grid */
+.friends-repost-grid {
   display: grid;
-  grid-template-columns: 36px 120px 1fr;
-  gap: 16px;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--nyt-border);
-  cursor: pointer;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--friends-space-5) var(--friends-space-5);
 }
-.friends-one-pick-row:last-child { border-bottom: none; }
-.friends-one-pick-row:hover .fop-title { color: var(--nyt-link-hover); }
-.friends-one-pick-row .fop-av {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--nyt-friends-accent); color: white;
+
+/* L3 — repost card */
+.friends-repost-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--friends-space-2);
+}
+
+/* L4 — repost header */
+.friends-repost-header {
+  display: flex;
+  align-items: center;
+  gap: var(--friends-space-2);
+}
+.friends-repost-header .fr-av {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--nyt-friends-accent);
+  color: white;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   background-size: cover; background-position: center;
+  flex-shrink: 0;
 }
-.friends-one-pick-row .fop-av.has-photo { color: transparent; }
-.friends-one-pick-row .fop-thumb {
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
-}
-.friends-one-pick-row .fop-label {
+.friends-repost-header .fr-av.has-photo { color: transparent; }
+.friends-repost-header .fr-meta {
   font-family: var(--font-meta);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--nyt-friends-accent);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.friends-repost-header .who {
   font-weight: 600;
-  margin-bottom: 4px;
+  color: var(--nyt-text);
+  cursor: pointer;
 }
-.friends-one-pick-row .fop-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 1.2;
-  margin-bottom: 6px;
+.friends-repost-header .who:hover { text-decoration: underline; }
+.friends-repost-header .fr-verb {
+  color: var(--nyt-text-meta);
 }
-.friends-one-pick-row .fop-note {
+
+/* L4 — commentary */
+.friends-repost-commentary {
+  font-family: var(--font-subhead);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--nyt-text);
+}
+
+/* L4/L5 — embedded article (story-card) */
+.friends-repost-article {
+  border: 1px solid var(--nyt-border);
+  padding: var(--friends-space-2);
+  background: var(--nyt-bg);
+  margin-top: var(--friends-space-1);
+}
+.friends-repost-card .friends-repost-article.story-card {
+  margin-bottom: 0;
+  padding-bottom: var(--friends-space-2);
+  border-bottom: 1px solid var(--nyt-border);
+}
+.friends-repost-article .story-img {
+  margin-bottom: var(--friends-space-2);
+}
+.friends-repost-article h2 {
+  margin-bottom: var(--friends-space-1);
+}
+.friends-repost-article .summary {
+  margin-bottom: var(--friends-space-1);
+}
+
+.friends-empty {
+  grid-column: 1 / -1;
+  padding: var(--friends-space-6) var(--friends-space-3);
+  text-align: center;
   font-family: var(--font-subhead);
   font-size: 14px;
-  color: var(--nyt-text-light);
-  line-height: 1.4;
+  color: var(--nyt-text-meta);
 }
 
-/* Shelf strip — inviting profile cards */
+/* L3 — shelf cards */
 .friends-shelf-strip {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  gap: var(--friends-space-4);
 }
 .friends-shelf-card {
-  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--nyt-friends-bg);
   border: 1px solid var(--nyt-border);
   border-radius: 4px;
   overflow: hidden;
@@ -586,7 +714,7 @@ img { display: block; max-width: 100%; }
 .friends-shelf-card .fsc-av {
   position: absolute;
   bottom: -18px;
-  left: 16px;
+  left: var(--friends-space-3);
   width: 44px; height: 44px;
   border-radius: 50%;
   border: 3px solid white;
@@ -600,7 +728,10 @@ img { display: block; max-width: 100%; }
 }
 .friends-shelf-card .fsc-av.has-photo { color: transparent; }
 .friends-shelf-card .fsc-body {
-  padding: 26px 16px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 26px var(--friends-space-3) var(--friends-space-3);
   background: var(--nyt-friends-bg);
 }
 .friends-shelf-card .fsc-shelf-label {
@@ -610,14 +741,14 @@ img { display: block; max-width: 100%; }
   letter-spacing: 0.07em;
   color: var(--nyt-friends-accent);
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: var(--friends-space-1);
 }
 .friends-shelf-card .fsc-pick-title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 17px;
   line-height: 1.25;
-  margin-bottom: 8px;
+  margin-bottom: var(--friends-space-1);
   color: var(--nyt-black);
 }
 .friends-shelf-card .fsc-preview {
@@ -625,7 +756,7 @@ img { display: block; max-width: 100%; }
   font-size: 13px;
   color: var(--nyt-text-light);
   line-height: 1.45;
-  margin-bottom: 12px;
+  margin-bottom: var(--friends-space-2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -637,265 +768,8 @@ img { display: block; max-width: 100%; }
   font-weight: 600;
   color: var(--nyt-blue);
   letter-spacing: 0.02em;
+  margin-top: auto;
 }
-
-/* Passages block */
-.friends-passages-block {
-  background: var(--nyt-bg-alt);
-  border: 1px solid var(--nyt-border);
-  padding: 24px 28px;
-  margin-top: 4px;
-}
-.friends-passage-item {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--nyt-border);
-  cursor: pointer;
-}
-.friends-passage-item:first-child { padding-top: 0; }
-.friends-passage-item:last-child { border-bottom: none; padding-bottom: 0; }
-.friends-passage-item:hover .fp-text { color: var(--nyt-link-hover); }
-.friends-passage-item .fp-meta {
-  font-family: var(--font-meta);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--nyt-friends-accent);
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.friends-passage-item .fp-text {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 22px;
-  line-height: 1.4;
-  color: var(--nyt-black);
-  background: var(--nyt-highlight);
-  padding: 16px 20px;
-  border-left: 4px solid var(--nyt-highlight-hover);
-  margin-bottom: 12px;
-}
-.friends-passage-item .fp-source {
-  font-family: var(--font-subhead);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--nyt-blue);
-  line-height: 1.35;
-}
-.friends-passage-item .fp-source span {
-  color: var(--nyt-text-meta);
-  font-weight: 400;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: 4px;
-}
-
-/* Activity timeline */
-.friends-activity-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.friends-activity-filters {
-  display: flex;
-  gap: 0;
-  font-family: var(--font-subhead);
-}
-.friends-activity-filters button {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--nyt-text-meta);
-  border: 1px solid var(--nyt-border);
-  border-right: none;
-  background: white;
-}
-.friends-activity-filters button:first-child { border-radius: 3px 0 0 3px; }
-.friends-activity-filters button:last-child { border-right: 1px solid var(--nyt-border); border-radius: 0 3px 3px 0; }
-.friends-activity-filters button.active {
-  background: var(--nyt-black);
-  color: white;
-  border-color: var(--nyt-black);
-}
-.friends-activity-filters button.active + button { border-left-color: var(--nyt-black); }
-.friends-activity-list { display: flex; flex-direction: column; }
-.friends-activity-item {
-  display: grid;
-  grid-template-columns: 1fr 72px;
-  gap: 16px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--nyt-border);
-  align-items: start;
-}
-.friends-activity-item:last-child { border-bottom: none; }
-.friends-activity-item .fai-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-family: var(--font-meta);
-  font-size: 11px;
-}
-.friends-activity-item .fai-meta .fai-av {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--nyt-friends-accent); color: white;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 700;
-  background-size: cover; background-position: center;
-  flex-shrink: 0;
-}
-.friends-activity-item .fai-meta .fai-av.has-photo { color: transparent; }
-.friends-activity-item .fai-meta .who {
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--nyt-text);
-}
-.friends-activity-item .fai-meta .who:hover { text-decoration: underline; }
-.friends-activity-item .fai-meta .verb { color: var(--nyt-text-meta); }
-.friends-activity-item .fai-passage {
-  font-family: var(--font-subhead);
-  font-style: italic;
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--nyt-text-light);
-  margin-bottom: 6px;
-}
-.friends-activity-item .fai-note {
-  font-family: var(--font-subhead);
-  font-size: 13px;
-  color: var(--nyt-text-light);
-  margin-bottom: 6px;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.friends-activity-item .fai-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.2;
-  margin-bottom: 2px;
-  cursor: pointer;
-}
-.friends-activity-item .fai-title:hover { color: var(--nyt-link-hover); }
-.friends-activity-item .fai-section {
-  font-family: var(--font-meta);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--nyt-blue);
-  font-weight: 600;
-}
-.friends-activity-item .fai-thumb {
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
-  cursor: pointer;
-}
-.friends-show-more {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px;
-  font-family: var(--font-subhead);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--nyt-blue);
-  background: white;
-  border: 1px solid var(--nyt-border);
-  border-radius: 3px;
-  cursor: pointer;
-  text-align: center;
-}
-.friends-show-more:hover { background: var(--nyt-bg-alt); }
-
-.friends-feed {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-}
-.friend-rec-card {
-  border-bottom: 1px solid var(--nyt-border);
-  padding-bottom: 28px;
-}
-.friend-rec-card .recommender {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  background: var(--nyt-friends-bg);
-  margin-bottom: 14px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  border-left: 3px solid var(--nyt-friends-accent);
-}
-.friend-rec-card .recommender .av {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--nyt-friends-accent); color: white;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
-  flex-shrink: 0;
-}
-.friend-rec-card .recommender .who {
-  font-weight: 600;
-  cursor: pointer;
-}
-.friend-rec-card .recommender .who:hover { text-decoration: underline; }
-.friend-rec-card .recommender .meta {
-  color: var(--nyt-text-meta);
-  font-size: 11px;
-  margin-left: 2px;
-}
-.friend-rec-card .note {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 15px;
-  color: var(--nyt-text);
-  padding: 12px 16px;
-  border-left: 2px solid var(--nyt-friends-accent);
-  margin-bottom: 14px;
-  background: #fafaf7;
-  line-height: 1.45;
-}
-.friend-rec-card .note .quote-mark {
-  font-family: var(--font-display);
-  font-size: 22px;
-  color: var(--nyt-friends-accent);
-  font-style: normal;
-  margin-right: 4px;
-  vertical-align: -3px;
-}
-.friend-rec-card .article-block {
-  cursor: pointer;
-}
-.friend-rec-card .article-block:hover h2 { color: var(--nyt-link-hover); }
-.friend-rec-card h2 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 1.15;
-  margin-bottom: 8px;
-}
-.friend-rec-card .summary {
-  font-size: 14px;
-  color: var(--nyt-text-light);
-  line-height: 1.45;
-  margin-bottom: 10px;
-}
-.friend-rec-card .byline {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--nyt-text-meta);
-}
-.friend-rec-card .byline a { color: var(--nyt-text); }
 
 /* ============================================================
    ARTICLE PAGE
@@ -1809,118 +1683,96 @@ img { display: block; max-width: 100%; }
   opacity: 0.45;
 }
 
-/* Demo hint pill (corner) */
-.demo-hint {
-  position: fixed;
-  bottom: 18px;
-  left: 18px;
-  background: var(--nyt-black);
-  color: white;
-  font-family: var(--font-sans);
-  font-size: 11px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  z-index: 500;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.demo-hint:hover { background: var(--nyt-text-light); }
-.demo-hint .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--nyt-friends-accent);
-  display: inline-block;
-}
-
-.demo-panel {
-  position: fixed;
-  bottom: 56px;
-  left: 18px;
-  background: white;
-  color: var(--nyt-text);
-  font-family: var(--font-sans);
-  width: 320px;
-  padding: 18px 20px;
-  border-radius: 4px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  border: 1px solid var(--nyt-border);
-  z-index: 500;
-  display: none;
-}
-.demo-panel.show { display: block; }
-.demo-panel h4 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-.demo-panel ol {
-  font-size: 12.5px;
-  line-height: 1.55;
-  padding-left: 18px;
-  color: var(--nyt-text-light);
-}
-.demo-panel ol li { margin-bottom: 8px; }
-.demo-panel ol li strong { color: var(--nyt-text); }
-
 @media (max-width: 900px) {
   .home-grid { grid-template-columns: 1fr; }
+  .home-grid-feature { grid-template-columns: 1fr; }
+  .home-col-sidebar { padding-left: 0; padding-top: 20px; }
   .home-col { border-right: none; border-bottom: 1px solid var(--nyt-border); padding: 0 0 24px; margin-bottom: 24px; }
   .section-block-grid { grid-template-columns: repeat(2, 1fr); }
-  .friends-feed { grid-template-columns: 1fr; }
-  .friends-one-pick-row { grid-template-columns: 36px 1fr; }
-  .friends-one-pick-row .fop-thumb { display: none; }
-  .friends-activity-item { grid-template-columns: 1fr; }
-  .friends-activity-item .fai-thumb { display: none; }
-  .friends-shelf-strip { grid-template-columns: 1fr 1fr; }
+  .friends-repost-grid {
+    grid-template-columns: 1fr;
+    gap: var(--friends-space-4);
+  }
+  .friends-repost-card {
+    padding-bottom: var(--friends-space-4);
+    border-bottom: 1px solid var(--nyt-border);
+  }
+  .friends-repost-card:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .friends-shelf-strip { grid-template-columns: 1fr; }
+  .friends-zone + .friends-zone {
+    margin-top: var(--friends-space-5);
+    padding-top: var(--friends-space-5);
+  }
   .profile-header { grid-template-columns: 1fr; }
   .profile-header .av-large { width: 100px; height: 100px; font-size: 36px; }
   .profile-header .info h1 { font-size: 38px; }
   .article-headline { font-size: 32px; }
   .highlights-rail { display: none !important; }
   .shelf-one-pick { grid-template-columns: 1fr; }
-  .section-nav-inner { overflow-x: auto; justify-content: flex-start; }
+  .masthead-row-inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 12px;
+    text-align: center;
+  }
+  .masthead-left { justify-self: center; }
+  .masthead-row .logo { order: -1; }
+  .masthead-market { justify-self: center; text-align: center; }
+  .header-top-inner { grid-template-columns: 1fr auto 1fr; }
+  .header-editions { gap: 12px; font-size: 10px; flex-wrap: wrap; }
+  .section-nav-inner { overflow-x: auto; justify-content: flex-start; flex-wrap: nowrap; padding-bottom: 4px; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP UTILITY BAR -->
-<div class="utility-bar">
-  <div class="utility-bar-inner">
-    <div class="utility-left">
-      <a href="#">U.S.</a><a href="#">International</a><a href="#">Canada</a><a href="#">Español</a><a href="#">中文</a>
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-top-inner">
+      <button class="header-search" type="button" aria-label="Search" onclick="toast('Search is not part of this prototype')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+        </svg>
+      </button>
+      <div class="header-editions">
+        <a href="#" class="edition-active">U.S.</a>
+        <a href="#">International</a>
+        <a href="#">Canada</a>
+        <a href="#">Español</a>
+        <a href="#">中文</a>
+      </div>
+      <div class="header-account">
+        <span class="account" id="header-avatar" title="Your profile">KE</span>
+      </div>
     </div>
-    <div class="utility-center" id="util-date"></div>
-    <div class="utility-right">
-      <a href="#">Today's Paper</a>
-      <span class="account" id="header-avatar" title="Your profile">AK</span>
+  </div>
+
+  <div class="masthead-row">
+    <div class="masthead-row-inner">
+      <div class="masthead-left">
+        <div class="masthead-date" id="masthead-date"></div>
+        <a href="#" class="masthead-paper">Today's Paper</a>
+      </div>
+      <div class="logo" onclick="navigate('home')">
+        <img src="assets/The_New_York_Times_logo.png" alt="The New York Times" width="440" height="65">
+      </div>
+      <div class="masthead-market">
+        S&amp;P 500 <span class="market-change up">+0.22% ▲</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- SUBSCRIBE BANNER -->
-<div class="sub-banner">
-  <div class="sub-banner-inner">
-    <button class="btn-sub">Subscribe for $0.50/week</button>
-    <button class="btn-login">Log in</button>
-  </div>
-</div>
+  <nav class="section-nav">
+    <div class="section-nav-inner" id="section-nav-inner"></div>
+  </nav>
 
-<!-- MASTHEAD -->
-<div class="masthead">
-  <div class="logo" onclick="navigate('home')">The New York Times</div>
-  <div class="date-line" id="masthead-date"></div>
-</div>
-
-<!-- SECTION NAV -->
-<nav class="section-nav">
-  <div class="section-nav-inner" id="section-nav-inner">
-    <!-- populated by JS -->
-  </div>
-</nav>
+  <div class="header-rule-double" aria-hidden="true"></div>
+</header>
 
 <!-- MAIN -->
 <main id="app"></main>
@@ -1961,33 +1813,48 @@ img { display: block; max-width: 100%; }
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Demo hint -->
-<div class="demo-hint" id="demo-hint" onclick="toggleDemoPanel()">
-  <span class="dot"></span><span>Demo guide</span>
-</div>
-<div class="demo-panel" id="demo-panel">
-  <h4>Try these flows</h4>
-  <ol>
-    <li><strong>Friends:</strong> reader shelves and recommendations — visit <em>Bree</em> or <em>Devin</em> for full profiles.</li>
-    <li><strong>Repost + highlight:</strong> open any article, click <em>Highlight</em>, then select a sentence. Or click <em>Repost</em>.</li>
-    <li><strong>Profiles:</strong> click any author name or friend chip. Click <em>AK</em> at top-right for your own profile (with visibility toggles).</li>
-    <li><strong>Private profile:</strong> visit <em>Theo</em> — content below the header is hidden unless it's your account.</li>
-  </ol>
-</div>
-
 <script>
 /* ============================================================
    DATA
    ============================================================ */
 
-// USERS — journalists, friends, and "you"
+// ============================================================
+// USERS — edit "you" + your friend group here
+// ============================================================
+//
+// YOU (the logged-in reader):
+//   • Find the entry with isMe: true (currently 'kelvin').
+//   • Change id only if you also update every reference below:
+//     shelves, PROFILE_IMAGES, following, reposts, highlights, recentlyRead.
+//   • Edit name, initials (shown in nav avatar), role, bio.
+//
+// FRIENDS (readers in your group):
+//   • Edit ashley / abbey / kelvin / nati — or duplicate a reader block with a new id.
+//   • Each friend needs: id, name, initials, type: 'reader', role, bio.
+//   • isPublic: true  → visible on Friends page & profiles
+//   • isPublic: false → private (like Theo); hidden unless isMe: true
+//
+// JOURNALISTS (Times bylines):
+//   • Leave type: 'journalist' — they write articles, not reader shelves.
+//   • Only edit if you want different author names/bios on article pages.
+//
+// After renaming or adding a friend, also update:
+//   PROFILE_IMAGES  → profile photo URL
+//   shelves         → their reading shelf (onePick, topFive, etc.)
+//   following       → who "you" follow (Friends feed + shelves)
+//   reposts         → userId must match their id
+//   highlights      → userId must match their id
+//
+// If you change YOUR id from 'kelvin', also search the file for 'kelvin' and
+// update the header avatar (#header-avatar) and the click handler
+// at the bottom of the script.
+//
 const users = {
   'aarushi': {
     id: 'aarushi', name: 'Aarushi Kumar', initials: 'AK',
     type: 'reader',
     role: 'Reader',
-    bio: 'Junior at Stanford. Reading mostly about cities, design, and the long, weird tail of the internet.',
-    isMe: true,
+    bio: 'Aarushi is a sophomore at Stanford studying design, computer science, and comparative literature!',
     isPublic: true,
   },
   'marcus-halloran': {
@@ -2025,33 +1892,34 @@ const users = {
     bio: "Daniel Okeke reports on national politics and food systems policy.",
     isPublic: true,
   },
-  'bree': {
-    id: 'bree', name: 'Bree Sandoval', initials: 'BS',
+  'ashley': {
+    id: 'ashley', name: 'Ashley', initials: 'AS',
     type: 'reader',
     role: 'Reader',
-    bio: 'Design student, infrequent highlighter, prolific reposter. Mostly read Style and Opinion.',
+    bio: "Stanford '28, live laugh love🥰",
     isPublic: true,
   },
-  'devin': {
-    id: 'devin', name: 'Devin Park', initials: 'DP',
+  'abbey': {
+    id: 'abbey', name: 'Abbey', initials: 'AB',
     type: 'reader',
     role: 'Reader',
-    bio: 'Sociology PhD. Marks up every long read like a paper draft.',
+    bio: 'Stanford student studying Design manufacturing and member of Stanford Track and Field team',
     isPublic: true,
   },
-  'maya': {
-    id: 'maya', name: 'Maya Okonkwo', initials: 'MO',
+  'kelvin': {
+    id: 'kelvin', name: 'Kelvin', initials: 'KE',
     type: 'reader',
     role: 'Reader',
-    bio: 'Software engineer. Reads more Opinion than I should admit.',
+    bio: 'Kelvin thinks he goes to Stanford and only occasionally studies Design, designs lighting, and researchs in a lab',
+    isMe: true,
     isPublic: true,
   },
-  'theo': {
-    id: 'theo', name: 'Theo Marchetti', initials: 'TM',
+  'nati': {
+    id: 'nati', name: 'Nati Vergara', initials: 'NV',
     type: 'reader',
     role: 'Reader',
-    bio: "Film school. Style and Arts, mostly. Things I'd talk about at dinner.",
-    isPublic: false,
+    bio: "Nati Vergara is a Stanford student studying Design and women's health. Originally from Lima, Peru, she is passionate about building products and communities that help people live more active and connected lives.",
+    isPublic: true,
   },
 };
 
@@ -2244,6 +2112,149 @@ const articles = {
       "What night workers describe, again and again, is a particular kind of loneliness — the loneliness of being awake while the people you love are asleep, and of sleeping while they are awake. A life that runs on a different clock than every other life around it.",
     ],
   },
+  'a13': {
+    id: 'a13',
+    title: 'In U.F.O. Files, Some Christians See Vexing Questions, and Demons',
+    subtitle: 'The prospect of intelligent life elsewhere in the universe raises unsettling theological implications.',
+    section: 'U.S.',
+    sectionUrl: 'U.S.',
+    displayAuthor: 'Ruth Graham',
+    author: 'daniel-okeke',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v13',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a14': {
+    id: 'a14',
+    title: 'The World Capital of French Fries Has a Problem: Too Many Potatoes',
+    subtitle: "Belgium's potato harvest set a record, just as tariffs hit U.S. demand for frozen fries and as competition from suppliers in Asia intensified.",
+    section: 'World',
+    sectionUrl: 'WORLD',
+    displayAuthor: 'Matina Stevis-Gridneff',
+    author: 'sarah-whitford',
+    date: 'May 30, 2026',
+    readTime: '6 MIN READ',
+    imgClass: 'img-v14',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a15': {
+    id: 'a15',
+    title: "He's Entitled and Nepotistic. This Is Not What Democrats Need.",
+    subtitle: '',
+    section: 'Opinion',
+    sectionUrl: 'OPINION',
+    displayAuthor: 'Michelle Cottle',
+    author: 'marcus-halloran',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v15',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a16': {
+    id: 'a16',
+    title: 'How to Stop the Affluent from Rigging the Housing Market',
+    subtitle: '',
+    section: 'Opinion',
+    sectionUrl: 'THE EDITORIAL BOARD',
+    displayAuthor: 'The Editorial Board',
+    author: 'marcus-halloran',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v16',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a17': {
+    id: 'a17',
+    title: "What the Meat Industry Doesn't Want You to Know",
+    subtitle: '',
+    section: 'Opinion',
+    sectionUrl: 'OPINION',
+    displayAuthor: 'Nicholas Kristof',
+    author: 'daniel-okeke',
+    date: 'May 30, 2026',
+    readTime: '4 MIN READ',
+    imgClass: 'img-v17',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a18': {
+    id: 'a18',
+    title: 'The YOLO Republicans',
+    subtitle: '',
+    section: 'Opinion',
+    sectionUrl: 'THE OPINIONS',
+    displayAuthor: 'The Opinions',
+    author: 'marcus-halloran',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v18',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a19': {
+    id: 'a19',
+    title: 'After Judge Orders His Name Off Kennedy Center, Trump Reacts With Fury',
+    subtitle: '',
+    section: 'Politics',
+    sectionUrl: 'POLITICS',
+    displayAuthor: 'Maggie Haberman',
+    author: 'daniel-okeke',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v19',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a20': {
+    id: 'a20',
+    title: 'What Exactly Caused That Loud Boom in South Carolina?',
+    subtitle: '',
+    section: 'U.S.',
+    sectionUrl: 'U.S.',
+    displayAuthor: 'Johnny Diaz',
+    author: 'sarah-whitford',
+    date: 'May 30, 2026',
+    readTime: '2 MIN READ',
+    imgClass: 'img-v20',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a21': {
+    id: 'a21',
+    title: 'Scooter Rider and Cyclist Are Killed in Head-On Crash on N.Y.C. Bridge',
+    subtitle: '',
+    section: 'New York',
+    sectionUrl: 'NEW YORK',
+    displayAuthor: 'Chelsia Rose Marcius',
+    author: 'eliza-chen',
+    date: 'May 30, 2026',
+    readTime: '3 MIN READ',
+    imgClass: 'img-v21',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a22': {
+    id: 'a22',
+    title: 'The Forecast That Saved the World, and the Movie That Tells the Story',
+    subtitle: '',
+    section: 'Arts',
+    sectionUrl: 'ARTS',
+    displayAuthor: 'Manohla Dargis',
+    author: 'priya-raghunathan',
+    date: 'May 30, 2026',
+    readTime: '5 MIN READ',
+    imgClass: 'img-v22',
+    body: ['Display-only article for homepage prototype.'],
+  },
+  'a23': {
+    id: 'a23',
+    title: 'A.I. Boom Upends San Francisco Housing Market',
+    subtitle: '',
+    section: 'Real Estate',
+    sectionUrl: 'REAL ESTATE',
+    displayAuthor: 'Conor Dougherty',
+    author: 'eliza-chen',
+    date: 'May 30, 2026',
+    readTime: '3 MIN READ',
+    imgClass: 'img-v23',
+    body: ['Display-only article for homepage prototype.'],
+  },
 };
 
 // ============================================================
@@ -2262,19 +2273,37 @@ const ARTICLE_IMAGES = {
   a10: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',  // office
   a11: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80',  // bookstore
   a12: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',  // night shift
+  a13: 'https://images.unsplash.com/photo-1589817327185-d6502a579376?w=800&q=80',  // stop sign (ufo)
+  a14: 'https://images.unsplash.com/photo-1676919396840-c127b0d61a32?w=800&q=80',  // vegetables market (potatoes)
+  a15: 'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&q=80',  // politics
+  a16: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',  // housing
+  a17: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',  // meat
+  a18: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',  // capitol
+  a19: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',  // concert hall
+  a20: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&q=80',  // storm
+  a21: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=80',  // bridge
+  a22: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80',  // cinema
+  a23: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',  // skyline
 };
 
 const PROFILE_IMAGES = {
-  aarushi: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
-  bree:    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
-  devin:   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-  maya:    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
-  theo:    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+  // Keys must match user ids above. Paste any image URL (Unsplash, a photo link, etc.).
+  // Omit a key to fall back to colored initials avatar.
+  aarushi: 'assets/aarushi.jpeg',
+  ashley:  'assets/ashley.jpeg',
+  abbey:   'assets/abbey.JPG',
+  kelvin:  'assets/kelvin.jpg',
+  nati:    'assets/nati.jpg',
 };
 
 // ============================================================
-// SHELVES — reader profile curation (edit here)
+// SHELVES — each reader friend's profile content (edit here)
 // ============================================================
+//
+// One block per reader id (kelvin + each friend). articleId → see ARTICLES keys (a1, a2, …).
+// favoritePassageIds → highlight ids in highlights[] with matching userId.
+// visibility.shelf / recentlyRead: 'public' | 'friends' | 'private'
+//
 const shelves = {
   aarushi: {
     onePick: { articleId: 'a1', note: 'The piece I keep sending to friends who say cities feel exhausting.' },
@@ -2290,9 +2319,9 @@ const shelves = {
     recentlyRead: ['a1', 'a4', 'a11', 'a7', 'a6'],
     visibility: { shelf: 'friends', recentlyRead: 'friends' },
     shelfUpdatedAt: 'March 2026',
-    showRefreshNudge: true,
+    showRefreshNudge: false,
   },
-  bree: {
+  ashley: {
     onePick: { articleId: 'a1', note: 'Send this to anyone who thinks parks are optional.' },
     topFive: [
       { articleId: 'a6', note: 'Linen as ideology.' },
@@ -2308,7 +2337,7 @@ const shelves = {
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
-  devin: {
+  abbey: {
     onePick: { articleId: 'a5', note: 'Generational baselines as invisible infrastructure.' },
     topFive: [
       { articleId: 'a1', note: 'Pairs with everything in the attention-economy canon.' },
@@ -2324,7 +2353,7 @@ const shelves = {
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
-  maya: {
+  kelvin: {
     onePick: { articleId: 'a10', note: 'Vindication for everyone who has taken a meeting in a phone booth.' },
     topFive: [
       { articleId: 'a4', note: 'Renderings as parallel city.' },
@@ -2338,47 +2367,59 @@ const shelves = {
     recentlyRead: ['a10', 'a4', 'a3', 'a1'],
     visibility: { shelf: 'friends', recentlyRead: 'public' },
     shelfUpdatedAt: 'May 2026',
-    showRefreshNudge: false,
+    showRefreshNudge: true,
   },
-  theo: {
+  nati: {
     onePick: null,
     topFive: [],
     gladAnyway: null,
     favoritePassageIds: ['hl8'],
     recentlyRead: ['a8', 'a6'],
-    visibility: { shelf: 'private', recentlyRead: 'private' },
+    visibility: { shelf: 'friends', recentlyRead: 'friends' },
     shelfUpdatedAt: 'May 2026',
     showRefreshNudge: false,
   },
 };
 
-// FOLLOWING — who Aarushi follows (and friend relationships)
-let following = new Set(['bree', 'devin', 'maya']);
+// FOLLOWING — which friends appear on your Friends page
+// Add/remove reader ids here. Must match users with type: 'reader'.
+// Private profiles (isPublic: false) won't show unless you follow them and they're in this set.
+let following = new Set(['ashley', 'abbey', 'kelvin', 'nati']);
 
-// REPOSTS — array of { id, userId, articleId, commentary, date }
+// REPOSTS — what friends share on the Friends feed (userId = friend id, articleId = a1…)
 let reposts = [
-  { id: 'r1', userId: 'bree', articleId: 'a1', commentary: "Made me re-read the part about benches three times. Sending this to my mom.", date: 'May 22' },
-  { id: 'r2', userId: 'devin', articleId: 'a5', commentary: "This is the paper I've been waiting for someone to write.", date: 'May 21' },
-  { id: 'r3', userId: 'maya', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
-  { id: 'r4', userId: 'theo', articleId: 'a8', commentary: "", date: 'May 19' },
-  { id: 'r5', userId: 'bree', articleId: 'a6', commentary: "Linen propaganda but I'm into it.", date: 'May 18' },
+  { id: 'r1', userId: 'ashley', articleId: 'a1', commentary: "Made me re-read the part about benches three times. Sending this to my mom.", date: 'May 22' },
+  { id: 'r2', userId: 'abbey', articleId: 'a5', commentary: "This is the paper I've been waiting for someone to write.", date: 'May 21' },
+  { id: 'r3', userId: 'kelvin', articleId: 'a10', commentary: "Vindication for everyone who has ever taken a meeting in a phone booth.", date: 'May 20' },
+  { id: 'r4', userId: 'nati', articleId: 'a8', commentary: "", date: 'May 19' },
+  { id: 'r5', userId: 'ashley', articleId: 'a6', commentary: "Linen propaganda but I'm into it.", date: 'May 18' },
   { id: 'r6', userId: 'marcus-halloran', articleId: 'a11', commentary: "Wrote this one while sitting in the bookstore I was writing about.", date: 'May 11' },
   { id: 'r7', userId: 'marcus-halloran', articleId: 'a4', commentary: "Eliza's piece is the kind of reporting I wish more people did. The renderings as a 'secondary architecture' is a phrase I will be stealing.", date: 'May 18' },
   { id: 'r8', userId: 'eliza-chen', articleId: 'a10', commentary: "Companion piece to the SF renderings story in some ways — both about what architecture promises.", date: 'May 12' },
-  { id: 'r9', userId: 'devin', articleId: 'a1', commentary: "The line about 'units of throughput' is going on my office door.", date: 'May 22' },
-  { id: 'r10', userId: 'maya', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
+  { id: 'r9', userId: 'abbey', articleId: 'a1', commentary: "The line about 'units of throughput' is going on my office door.", date: 'May 22' },
+  { id: 'r10', userId: 'kelvin', articleId: 'a4', commentary: "Walked past three of these renderings on the way home from work today.", date: 'May 19' },
+  { id: 'r11', userId: 'ashley', articleId: 'a23', commentary: "This is literally our neighborhood. RIP my lease renewal.", date: 'May 30' },
+  { id: 'r12', userId: 'abbey', articleId: 'a14', commentary: "Suddenly craving fries. Also tariffs are weird.", date: 'May 29' },
+  { id: 'r13', userId: 'kelvin', articleId: 'a13', commentary: "Did not expect NYT theology takes today but here we are.", date: 'May 29' },
+  { id: 'r14', userId: 'nati', articleId: 'a17', commentary: "Everyone in our lab group chat sent this within five minutes.", date: 'May 28' },
+  { id: 'r15', userId: 'aarushi', articleId: 'a22', commentary: "Going to see the movie this weekend. The article is better.", date: 'May 28' },
+  { id: 'r16', userId: 'ashley', articleId: 'a20', commentary: "My cousin is in SC and sent me seventeen TikToks about this.", date: 'May 27' },
+  { id: 'r17', userId: 'kelvin', articleId: 'a19', commentary: "Wild week in arts funding.", date: 'May 27' },
+  { id: 'r18', userId: 'abbey', articleId: 'a18', commentary: "Sending this to everyone who keeps asking me about politics at dinner.", date: 'May 26' },
+  { id: 'r19', userId: 'nati', articleId: 'a16', commentary: "Housing policy as design problem — saving this for class.", date: 'May 26' },
+  { id: 'r20', userId: 'aarushi', articleId: 'a18', commentary: "The headline alone is doing a lot of work.", date: 'May 25' },
 ];
 
-// HIGHLIGHTS — array of { id, userId, articleId, passage, note, date }
+// HIGHLIGHTS — passages friends marked up (userId = friend id; tie to shelves via favoritePassageIds)
 let highlights = [
-  { id: 'hl1', userId: 'bree', articleId: 'a1', passage: "to simply be somewhere — without consuming, producing, or performing — is somehow a misuse of space", note: "I think about this every time I sit in a coffee shop and feel like I have to buy something.", date: 'May 22' },
-  { id: 'hl2', userId: 'devin', articleId: 'a1', passage: "A generation raised inside the optimization of every minute does not develop the muscle for stillness", note: "Worth pairing with the recent attention-economy literature. Almost the same finding, different vocabulary.", date: 'May 22' },
-  { id: 'hl3', userId: 'maya', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
-  { id: 'hl4', userId: 'devin', articleId: 'a5', passage: "They have, in a sense, never known a quiet city, and so they do not register the loud one as loud.", note: "Generational baselines as invisible infrastructure. Underrated framework.", date: 'May 21' },
+  { id: 'hl1', userId: 'ashley', articleId: 'a1', passage: "to simply be somewhere — without consuming, producing, or performing — is somehow a misuse of space", note: "I think about this every time I sit in a coffee shop and feel like I have to buy something.", date: 'May 22' },
+  { id: 'hl2', userId: 'abbey', articleId: 'a1', passage: "A generation raised inside the optimization of every minute does not develop the muscle for stillness", note: "Worth pairing with the recent attention-economy literature. Almost the same finding, different vocabulary.", date: 'May 22' },
+  { id: 'hl3', userId: 'kelvin', articleId: 'a10', passage: "Studies showed that workers in open offices interact face-to-face less, not more, than workers in private offices", note: "Saved this for the next time someone proposes a 'collaboration zone.'", date: 'May 20' },
+  { id: 'hl4', userId: 'abbey', articleId: 'a5', passage: "They have, in a sense, never known a quiet city, and so they do not register the loud one as loud.", note: "Generational baselines as invisible infrastructure. Underrated framework.", date: 'May 21' },
   { id: 'hl5', userId: 'marcus-halloran', articleId: 'a4', passage: "a parallel city stitched onto the real one", note: "Eliza chose the perfect phrase here. This is what's so haunting about walking through downtown SF right now.", date: 'May 19' },
   { id: 'hl6', userId: 'eliza-chen', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
-  { id: 'hl7', userId: 'bree', articleId: 'a11', passage: "Something is missing, and it is not the books.", note: "Oof.", date: 'May 14' },
-  { id: 'hl8', userId: 'theo', articleId: 'a8', passage: "intimacy of conversation requires the absence of an audience", note: "", date: 'May 15' },
+  { id: 'hl7', userId: 'ashley', articleId: 'a11', passage: "Something is missing, and it is not the books.", note: "Oof.", date: 'May 14' },
+  { id: 'hl8', userId: 'nati', articleId: 'a8', passage: "intimacy of conversation requires the absence of an audience", note: "", date: 'May 15' },
   { id: 'hl9', userId: 'aarushi', articleId: 'a1', passage: "These are not amenities. They are infrastructure.", note: "Should be on a plaque in front of every planning department.", date: 'May 21' },
 ];
 
@@ -2394,11 +2435,9 @@ let state = {
   highlightMode: false,
   selectedPassage: null,
   pendingRepostArticleId: null,
-  friendsFilter: 'all',     // 'all' | 'reposts' | 'highlights'
-  friendsShowAllActivity: false,
 };
 
-const today = "Saturday, May 23, 2026";
+const today = "Monday, June 1, 2026";
 
 /* ============================================================
    HELPERS
@@ -2451,6 +2490,27 @@ function renderArticleThumb(classes, articleId) {
   return box;
 }
 
+function renderDecorFeatureStory(id) {
+  const a = articles[id];
+  if (!a) return el('div');
+  const card = el('div', { class: 'story-card story-static' });
+  card.appendChild(renderArticleThumb('story-img', id));
+  card.appendChild(el('h2', {}, a.title));
+  if (a.subtitle) card.appendChild(el('div', { class: 'summary' }, a.subtitle));
+  card.appendChild(el('div', { class: 'read-time' }, a.readTime || '5 MIN READ'));
+  return card;
+}
+
+function renderDecorSidebarStory(id) {
+  const a = articles[id];
+  if (!a) return el('div');
+  const card = el('div', { class: 'story-card-small story-static home-sidebar-story' });
+  card.appendChild(renderArticleThumb('story-img story-img-small', id));
+  card.appendChild(el('h3', {}, a.title));
+  card.appendChild(el('div', { class: 'read-time' }, a.readTime || '5 MIN READ'));
+  return card;
+}
+
 function renderProfileAvatar(u) {
   const src = profileImage(u.id);
   const av = el('div', { class: 'av-large' + (src ? ' has-photo' : '') }, u.initials);
@@ -2487,7 +2547,7 @@ function cycleVisibility(uid, key) {
 }
 
 function trackRecentlyRead(articleId) {
-  const shelf = shelves['aarushi'];
+  const shelf = shelves['kelvin'];
   if (!shelf) return;
   shelf.recentlyRead = [articleId, ...shelf.recentlyRead.filter(id => id !== articleId)].slice(0, 5);
 }
@@ -2503,9 +2563,68 @@ function isFollowedReader(userId) {
   return !!(u && u.type === 'reader' && following.has(userId) && canViewProfileBody(u, false));
 }
 
-function truncateText(text, max) {
-  if (!text || text.length <= max) return text;
-  return text.slice(0, max).trim() + '\u2026';
+function getCappedReposts(maxPerUser) {
+  const sorted = reposts
+    .filter(rp => isFollowedReader(rp.userId))
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const counts = {};
+  return sorted.filter(rp => {
+    counts[rp.userId] = (counts[rp.userId] || 0) + 1;
+    return counts[rp.userId] <= maxPerUser;
+  });
+}
+
+function renderFriendsSectionHeader() {
+  return el('div', { class: 'friends-masthead' },
+    el('hr', { class: 'rule-thin' }),
+    el('h1', {}, 'Friends'),
+    el('hr', { class: 'rule-thin' }),
+    el('div', { class: 'section-tags' },
+      el('span', {}, 'Following'),
+      el('span', { class: 'dot' }, '\u00b7'),
+      el('span', {}, 'Recommendations')
+    ),
+    el('hr', { class: 'rule-thick' })
+  );
+}
+
+function renderFriendsSubsectionHeader(title, deck) {
+  const header = el('div', { class: 'friends-subsection-header' },
+    el('h2', {}, title)
+  );
+  if (deck) header.appendChild(el('p', { class: 'friends-subsection-deck' }, deck));
+  return header;
+}
+
+function renderRetweetCard(rp) {
+  const u = users[rp.userId];
+  const a = articles[rp.articleId];
+  if (!u || !a) return el('div');
+
+  const card = el('div', { class: 'friends-repost-card' });
+  card.appendChild(el('div', { class: 'friends-repost-header' },
+    renderFriendAv(u, 'fr-av'),
+    el('div', { class: 'fr-meta' },
+      el('span', { class: 'who', onclick: () => navigate('profile', { profileId: u.id }) }, u.name),
+      el('span', { class: 'fr-verb' }, ' reposted \u00b7 ' + rp.date)
+    )
+  ));
+
+  if (rp.commentary) {
+    card.appendChild(el('div', { class: 'friends-repost-commentary' }, rp.commentary));
+  }
+
+  const articleBlock = el('div', { class: 'friends-repost-article story-card' });
+  articleBlock.appendChild(renderArticleThumb('story-img story-img-small', a.id));
+  articleBlock.appendChild(el('h2', { onclick: () => navigate('article', { articleId: a.id }) }, a.title));
+  articleBlock.appendChild(el('div', { class: 'summary' }, a.subtitle));
+  articleBlock.appendChild(el('div', { class: 'byline' },
+    'By ',
+    el('a', { onclick: (e) => { e.stopPropagation(); navigate('profile', { profileId: a.author }); } },
+      users[a.author].name)
+  ));
+  card.appendChild(articleBlock);
+  return card;
 }
 
 function renderFriendAv(user, extraClass) {
@@ -2666,26 +2785,28 @@ function render() {
 }
 
 function renderUtilityBar() {
-  $('util-date').textContent = today;
-  $('masthead-date').innerHTML =
-    `<span>${today}</span><span class="dot"></span><span>Today's Paper</span><span class="dot"></span><span>72°F</span>`;
+  $('masthead-date').textContent = today;
+  const me = Object.values(users).find(u => u.isMe);
+  if (me) $('header-avatar').textContent = me.initials;
 }
 
 function renderNav() {
   const nav = $('section-nav-inner');
   nav.innerHTML = '';
   const sections = [
-    { id: 'us', label: 'U.S.' },
-    { id: 'world', label: 'World' },
-    { id: 'business', label: 'Business' },
-    { id: 'arts', label: 'Arts' },
-    { id: 'lifestyle', label: 'Lifestyle' },
-    { id: 'opinion', label: 'Opinion' },
+    { id: 'us', label: 'U.S.', chev: true },
+    { id: 'world', label: 'World', chev: true },
+    { id: 'business', label: 'Business', chev: true },
+    { id: 'arts', label: 'Arts', chev: true },
+    { id: 'lifestyle', label: 'Lifestyle', chev: true },
+    { id: 'opinion', label: 'Opinion', chev: true },
     { id: 'friends', label: 'Friends', friends: true },
-    { id: 'audio', label: 'Audio' },
-    { id: 'games', label: 'Games' },
-    { id: 'cooking', label: 'Cooking' },
+    { id: 'video', label: 'Video', chev: true },
+    { id: 'audio', label: 'Audio', chev: true },
+    { id: 'games', label: 'Games', chev: true },
+    { id: 'cooking', label: 'Cooking', chev: true },
     { id: 'wirecutter', label: 'Wirecutter' },
+    { id: 'athletic', label: 'The Athletic' },
   ];
   sections.forEach(s => {
     const isActive = (state.view === 'home' && s.id === 'friends' && state.homeTab === 'friends') ||
@@ -2697,7 +2818,10 @@ function renderNav() {
         else if (s.id === 'us') navigate('home', { tab: 'top' });
         else { toast('That section is not part of this prototype'); }
       },
-    }, s.label);
+    },
+      s.label,
+      s.chev ? el('span', { class: 'nav-chev' }, '▾') : null
+    );
     nav.appendChild(b);
   });
 }
@@ -2721,30 +2845,26 @@ function renderTopStories() {
   // top three-column grid
   const grid = el('div', { class: 'home-grid' });
 
-  // Left: hero
   const heroArt = articles['a1'];
   const heroCol = el('div', { class: 'home-col' });
   const heroImg = renderArticleThumb('story-img', heroArt.id);
   heroImg.appendChild(el('div', { class: 'caption' }, `Illustration · ${users[heroArt.author].name}`));
   heroCol.appendChild(heroImg);
-  const hero = el('div', { class: 'hero-story' },
+  heroCol.appendChild(el('div', { class: 'hero-story' },
     el('h1', { onclick: () => navigate('article', { articleId: heroArt.id }) }, heroArt.title),
     el('div', { class: 'summary' }, heroArt.subtitle),
     el('div', { class: 'byline' },
       'By ',
       el('a', { onclick: () => navigate('profile', { profileId: heroArt.author }) }, users[heroArt.author].name)
     )
-  );
-  heroCol.appendChild(hero);
+  ));
   grid.appendChild(heroCol);
 
-  // Middle: two stories with images
   const midCol = el('div', { class: 'home-col' });
   ['a2', 'a3'].forEach(id => {
     const a = articles[id];
     const card = el('div', { class: 'story-card' });
-    const img = renderArticleThumb('story-img story-img-small', a.id);
-    card.appendChild(img);
+    card.appendChild(renderArticleThumb('story-img story-img-small', a.id));
     card.appendChild(el('h2', { onclick: () => navigate('article', { articleId: a.id }) }, a.title));
     card.appendChild(el('div', { class: 'summary' }, a.subtitle));
     card.appendChild(el('div', { class: 'byline' },
@@ -2755,7 +2875,6 @@ function renderTopStories() {
   });
   grid.appendChild(midCol);
 
-  // Right: text-only quick reads
   const rightCol = el('div', { class: 'home-col' });
   ['a4', 'a5', 'a7', 'a10'].forEach(id => {
     const a = articles[id];
@@ -2767,11 +2886,20 @@ function renderTopStories() {
     ));
     rightCol.appendChild(card);
   });
+  ['a17', 'a19'].forEach(id => rightCol.appendChild(renderDecorSidebarStory(id)));
   grid.appendChild(rightCol);
-
   wrap.appendChild(grid);
 
-  // Friends-recommended teaser row (subtle, integrated)
+  // display-only featured stories (top half of NYT filler)
+  const decorGrid = el('div', { class: 'home-grid home-grid-feature' });
+  ['a13', 'a14'].forEach(id => {
+    const col = el('div', { class: 'home-col' });
+    col.appendChild(renderDecorFeatureStory(id));
+    decorGrid.appendChild(col);
+  });
+  wrap.appendChild(decorGrid);
+
+  // Friends-recommended teaser row
   const teaser = el('div', { class: 'section-block' });
   const teaserHeader = el('div', { class: 'section-block-header' },
     el('h2', {}, 'From Friends You Follow'),
@@ -2780,7 +2908,7 @@ function renderTopStories() {
   teaser.appendChild(teaserHeader);
 
   const teaserGrid = el('div', { class: 'section-block-grid' });
-  reposts.filter(rp => isFollowedReader(rp.userId)).slice(0, 4).forEach(rp => {
+  reposts.filter(rp => isFollowedReader(rp.userId)).slice(0, 6).forEach(rp => {
     const a = articles[rp.articleId];
     const u = users[rp.userId];
     if (!a || !u) return;
@@ -2827,69 +2955,31 @@ function renderTopStories() {
    FRIENDS FEED — readers only
    ============================================================ */
 function renderFriendsFeed() {
-  const wrap = el('div');
+  const wrap = el('div', { class: 'friends-page' });
   const readers = getFollowedReaders();
 
-  wrap.appendChild(el('div', { class: 'friends-intro' },
-    el('h1', {}, 'Friends'),
-    el('div', { class: 'sub' }, 'Reading recommendations from people you follow — always tied to a Times article.')
-  ));
+  wrap.appendChild(renderFriendsSectionHeader());
 
-  // — Following (top) —
-  if (readers.length) {
-    const top = el('div', { class: 'friends-following-top' });
-    top.appendChild(el('span', { class: 'label' }, 'People you follow'));
-    const chips = el('div', { class: 'chips' });
-    readers.forEach(u => {
-      chips.appendChild(el('span', {
-        class: 'friend-chip',
-        onclick: () => navigate('profile', { profileId: u.id })
-      },
-        renderFriendAv(u),
-        u.name
-      ));
-    });
-    top.appendChild(chips);
-    wrap.appendChild(top);
+  const primary = el('div', { class: 'friends-zone friends-zone-primary' });
+  const repostList = getCappedReposts(2);
+  const grid = el('div', { class: 'friends-repost-grid' });
+  if (!repostList.length) {
+    grid.appendChild(el('div', { class: 'friends-empty' },
+      'Nothing reposted yet from people you follow.'));
+  } else {
+    repostList.forEach(rp => grid.appendChild(renderRetweetCard(rp)));
   }
+  primary.appendChild(grid);
+  wrap.appendChild(primary);
 
-  // — One picks —
-  const onePicks = readers.filter(u => {
-    const shelf = shelves[u.id];
-    return shelf && shelf.onePick && articles[shelf.onePick.articleId] &&
-      canViewShelfSection(u, 'shelf', false);
-  });
-  if (onePicks.length) {
-    const section = el('div', { class: 'friends-section' });
-    section.appendChild(el('div', { class: 'friends-section-title' }, 'If you read one thing from them'));
-    section.appendChild(el('div', { class: 'friends-section-deck' },
-      'Each friend\u2019s single pick — the article they\u2019d hand you first.'));
-    const list = el('div', { class: 'friends-one-picks' });
-    onePicks.forEach(u => {
-      const shelf = shelves[u.id];
-      const a = articles[shelf.onePick.articleId];
-      list.appendChild(el('div', { class: 'friends-one-pick-row', onclick: () => navigate('article', { articleId: a.id }) },
-        renderFriendAv(u, 'fop-av'),
-        renderArticleThumb('fop-thumb', a.id),
-        el('div', {},
-          el('div', { class: 'fop-label' }, u.name.split(' ')[0] + '\u2019s pick'),
-          el('div', { class: 'fop-title' }, a.title),
-          el('div', { class: 'fop-note' }, shelf.onePick.note)
-        )
-      ));
-    });
-    section.appendChild(list);
-    wrap.appendChild(section);
-  }
-
-  // — Friend shelves (inviting cards) —
   const shelfFriends = readers.filter(u => shelves[u.id] && shelfHasContent(shelves[u.id]) &&
     canViewShelfSection(u, 'shelf', false));
   if (shelfFriends.length) {
-    const section = el('div', { class: 'friends-section' });
-    section.appendChild(el('div', { class: 'friends-section-title' }, 'Friend shelves'));
-    section.appendChild(el('div', { class: 'friends-section-deck' },
-      'Browse what each friend is reading — visit their full shelf on their profile.'));
+    const secondary = el('div', { class: 'friends-zone friends-zone-secondary' });
+    secondary.appendChild(renderFriendsSubsectionHeader(
+      'Friend shelves',
+      'Browse what each friend is reading — visit their full shelf on their profile.'
+    ));
     const strip = el('div', { class: 'friends-shelf-strip' });
     shelfFriends.forEach(u => {
       const shelf = shelves[u.id];
@@ -2914,122 +3004,11 @@ function renderFriendsFeed() {
       card.appendChild(body);
       strip.appendChild(card);
     });
-    section.appendChild(strip);
-    wrap.appendChild(section);
+    secondary.appendChild(strip);
+    wrap.appendChild(secondary);
   }
-
-  // — Favorite passages —
-  const passageItems = [];
-  readers.forEach(u => {
-    if (!canViewShelfSection(u, 'shelf', false)) return;
-    const shelf = shelves[u.id];
-    if (!shelf || !shelf.favoritePassageIds) return;
-    shelf.favoritePassageIds.forEach(hid => {
-      const hl = highlights.find(h => h.id === hid && h.userId === u.id);
-      if (hl) passageItems.push({ hl, u });
-    });
-  });
-  if (passageItems.length) {
-    const section = el('div', { class: 'friends-section' });
-    section.appendChild(el('div', { class: 'friends-section-title' }, 'Passages friends keep thinking about'));
-    const block = el('div', { class: 'friends-passages-block' });
-    passageItems.slice(0, 3).forEach(({ hl, u }) => {
-      const a = articles[hl.articleId];
-      if (!a) return;
-      block.appendChild(el('div', { class: 'friends-passage-item', onclick: () => navigate('article', { articleId: a.id }) },
-        el('div', { class: 'fp-meta' }, u.name.split(' ')[0] + ' highlighted'),
-        el('div', { class: 'fp-text' }, '\u201c' + hl.passage + '\u201d'),
-        el('div', { class: 'fp-source' },
-          el('span', {}, 'From'),
-          a.title
-        )
-      ));
-    });
-    section.appendChild(block);
-    wrap.appendChild(section);
-  }
-
-  // — Recent from friends (cap 5 + show more) —
-  const feed = [];
-  reposts.forEach(rp => {
-    if (isFollowedReader(rp.userId)) feed.push({ kind: 'repost', ...rp });
-  });
-  highlights.forEach(hl => {
-    if (isFollowedReader(hl.userId)) feed.push({ kind: 'highlight', ...hl });
-  });
-  feed.sort((a, b) => b.date.localeCompare(a.date));
-
-  const filtered = feed.filter(item => {
-    if (state.friendsFilter === 'reposts') return item.kind === 'repost';
-    if (state.friendsFilter === 'highlights') return item.kind === 'highlight';
-    return true;
-  });
-
-  const activitySection = el('div', { class: 'friends-section', style: 'border-bottom:none' });
-  const activityHeader = el('div', { class: 'friends-activity-header' },
-    el('div', { class: 'friends-section-title', style: 'margin-bottom:0' }, 'Recent from friends')
-  );
-  const filters = el('div', { class: 'friends-activity-filters' });
-  [['all', 'All'], ['reposts', 'Reposts'], ['highlights', 'Highlights']].forEach(([id, label]) => {
-    filters.appendChild(el('button', {
-      class: state.friendsFilter === id ? 'active' : '',
-      onclick: () => { state.friendsFilter = id; state.friendsShowAllActivity = false; render(); }
-    }, label));
-  });
-  activityHeader.appendChild(filters);
-  activitySection.appendChild(activityHeader);
-
-  const list = el('div', { class: 'friends-activity-list' });
-  if (!filtered.length) {
-    list.appendChild(el('div', { class: 'empty-state', style: 'padding:40px 20px' },
-      'Nothing here yet from your friends.'));
-  } else {
-    const visible = state.friendsShowAllActivity ? filtered : filtered.slice(0, 5);
-    visible.forEach(item => list.appendChild(renderFriendActivityItem(item)));
-    if (filtered.length > 5 && !state.friendsShowAllActivity) {
-      list.appendChild(el('button', {
-        class: 'friends-show-more',
-        onclick: () => { state.friendsShowAllActivity = true; render(); }
-      }, 'Show more (' + (filtered.length - 5) + ' more)'));
-    }
-  }
-  activitySection.appendChild(list);
-  wrap.appendChild(activitySection);
 
   return wrap;
-}
-
-function renderFriendActivityItem(item) {
-  const u = users[item.userId];
-  const a = articles[item.articleId];
-  if (!u || !a) return el('div');
-
-  const row = el('div', { class: 'friends-activity-item' });
-  const main = el('div', { class: 'fai-main' });
-
-  const verb = item.kind === 'repost' ? 'reposted' : 'highlighted';
-  main.appendChild(el('div', { class: 'fai-meta' },
-    renderFriendAv(u, 'fai-av'),
-    el('span', { class: 'who', onclick: () => navigate('profile', { profileId: u.id }) }, u.name),
-    el('span', { class: 'verb' }, ' ' + verb + ' \u00b7 ' + item.date)
-  ));
-
-  if (item.kind === 'highlight') {
-    main.appendChild(el('div', { class: 'fai-passage' },
-      '\u201c' + truncateText(item.passage, 90) + '\u201d'));
-  }
-  if (item.kind === 'repost' && item.commentary) {
-    main.appendChild(el('div', { class: 'fai-note' }, truncateText(item.commentary, 100)));
-  }
-
-  main.appendChild(el('div', { class: 'fai-title', onclick: () => navigate('article', { articleId: a.id }) }, a.title));
-  row.appendChild(main);
-
-  const thumb = renderArticleThumb('fai-thumb', a.id);
-  thumb.onclick = () => navigate('article', { articleId: a.id });
-  row.appendChild(thumb);
-
-  return row;
 }
 
 /* ============================================================
@@ -3140,7 +3119,7 @@ function applyHighlights(paragraph, articleId) {
     const safeNeedle = escapeHtml(hl.passage);
     const u = users[hl.userId];
     if (!u) return;
-    const isMine = hl.userId === 'aarushi';
+    const isMine = hl.userId === 'kelvin';
     const mark = `<span class="highlight-mark" data-mine="${isMine}" title="${escapeHtml(u.name)}${hl.note ? ': ' + escapeHtml(hl.note) : ''}">${safeNeedle}</span>`;
     html = html.split(safeNeedle).join(mark);
   });
@@ -3398,7 +3377,7 @@ function submitHighlight() {
   if (!passage) { closeModal('highlight-modal'); return; }
   const newHl = {
     id: 'hl_' + Date.now(),
-    userId: 'aarushi',
+    userId: 'kelvin',
     articleId: state.currentArticleId,
     passage,
     note,
@@ -3426,7 +3405,7 @@ function submitRepost() {
   if (!articleId) { closeModal('repost-modal'); return; }
   const newRp = {
     id: 'r_' + Date.now(),
-    userId: 'aarushi',
+    userId: 'kelvin',
     articleId,
     commentary,
     date: 'May 23',
@@ -3448,12 +3427,8 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 });
 
 // Header avatar → own profile
-$('header-avatar').addEventListener('click', () => navigate('profile', { profileId: 'aarushi' }));
-
-// Demo panel toggle
-function toggleDemoPanel() {
-  $('demo-panel').classList.toggle('show');
-}
+const meUser = Object.values(users).find(u => u.isMe);
+$('header-avatar').addEventListener('click', () => navigate('profile', { profileId: meUser ? meUser.id : 'kelvin' }));
 
 /* ============================================================
    INIT
