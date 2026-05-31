@@ -157,11 +157,11 @@ img { display: block; max-width: 100%; }
   border-bottom: 1px solid var(--nyt-border);
 }
 .masthead .logo {
-  font-family: var(--font-blackletter);
+  font-family: var(--font-headline);
   font-weight: 700;
-  font-size: 56px;
-  letter-spacing: 0;
-  line-height: 1;
+  font-size: 42px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--nyt-black);
   cursor: pointer;
   user-select: none;
@@ -435,21 +435,47 @@ img { display: block; max-width: 100%; }
   color: var(--nyt-text-meta);
   margin-right: 4px;
 }
+.friends-following-top {
+  background: var(--nyt-friends-bg);
+  border: 1px solid var(--nyt-border);
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+.friends-following-top .label {
+  font-family: var(--font-subhead);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--nyt-text-meta);
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+}
+.friends-following-top .chips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .friend-chip {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
   cursor: pointer;
-  padding: 4px 10px 4px 4px;
+  padding: 6px 14px 6px 6px;
   border-radius: 999px;
-  background: var(--nyt-bg-alt);
-  font-family: var(--font-sans);
-  font-size: 12px;
+  background: white;
+  border: 1px solid var(--nyt-border);
+  font-family: var(--font-subhead);
+  font-size: 14px;
   font-weight: 500;
+  transition: background 0.15s, border-color 0.15s;
 }
-.friend-chip:hover { background: var(--nyt-friends-bg); }
+.friend-chip:hover {
+  background: white;
+  border-color: var(--nyt-friends-accent);
+}
 .friend-chip .av {
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: var(--nyt-friends-accent); color: white;
   display: inline-flex; align-items: center; justify-content: center;
   font-size: 10px; font-weight: 700;
@@ -529,83 +555,140 @@ img { display: block; max-width: 100%; }
   line-height: 1.4;
 }
 
-/* Shelf strip */
+/* Shelf strip — inviting profile cards */
 .friends-shelf-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
 }
 .friends-shelf-card {
-  padding: 16px;
-  background: var(--nyt-bg-alt);
+  background: white;
   border: 1px solid var(--nyt-border);
+  border-radius: 4px;
+  overflow: hidden;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
-.friends-shelf-card:hover { background: var(--nyt-friends-bg); }
-.friends-shelf-card .fsc-top {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+.friends-shelf-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.friends-shelf-card .fsc-cover-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
+  overflow: hidden;
+}
+.friends-shelf-card .fsc-cover-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
 }
 .friends-shelf-card .fsc-av {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--nyt-friends-accent); color: white;
+  position: absolute;
+  bottom: -18px;
+  left: 16px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 3px solid white;
+  background: var(--nyt-friends-accent);
+  color: white;
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
+  font-size: 14px; font-weight: 700;
   background-size: cover; background-position: center;
-  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 1;
 }
 .friends-shelf-card .fsc-av.has-photo { color: transparent; }
-.friends-shelf-card .fsc-name {
-  font-family: var(--font-subhead);
-  font-weight: 600;
-  font-size: 14px;
+.friends-shelf-card .fsc-body {
+  padding: 26px 16px 16px;
+  background: var(--nyt-friends-bg);
 }
-.friends-shelf-card .fsc-link {
+.friends-shelf-card .fsc-shelf-label {
   font-family: var(--font-meta);
-  font-size: 11px;
-  color: var(--nyt-blue);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
+  color: var(--nyt-friends-accent);
   font-weight: 600;
+  margin-bottom: 6px;
+}
+.friends-shelf-card .fsc-pick-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  color: var(--nyt-black);
 }
 .friends-shelf-card .fsc-preview {
   font-family: var(--font-subhead);
   font-size: 13px;
   color: var(--nyt-text-light);
-  line-height: 1.4;
+  line-height: 1.45;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.friends-shelf-card .fsc-link {
+  font-family: var(--font-subhead);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nyt-blue);
+  letter-spacing: 0.02em;
 }
 
 /* Passages block */
+.friends-passages-block {
+  background: var(--nyt-bg-alt);
+  border: 1px solid var(--nyt-border);
+  padding: 24px 28px;
+  margin-top: 4px;
+}
 .friends-passage-item {
-  padding: 14px 0;
+  padding: 20px 0;
   border-bottom: 1px solid var(--nyt-border);
   cursor: pointer;
 }
-.friends-passage-item:last-child { border-bottom: none; }
+.friends-passage-item:first-child { padding-top: 0; }
+.friends-passage-item:last-child { border-bottom: none; padding-bottom: 0; }
 .friends-passage-item:hover .fp-text { color: var(--nyt-link-hover); }
 .friends-passage-item .fp-meta {
   font-family: var(--font-meta);
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   color: var(--nyt-friends-accent);
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .friends-passage-item .fp-text {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--nyt-black);
   background: var(--nyt-highlight);
-  padding: 10px 14px;
-  border-left: 3px solid var(--nyt-highlight-hover);
-  margin-bottom: 6px;
+  padding: 16px 20px;
+  border-left: 4px solid var(--nyt-highlight-hover);
+  margin-bottom: 12px;
 }
 .friends-passage-item .fp-source {
-  font-family: var(--font-meta);
-  font-size: 11px;
+  font-family: var(--font-subhead);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--nyt-blue);
+  line-height: 1.35;
+}
+.friends-passage-item .fp-source span {
   color: var(--nyt-text-meta);
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
 }
 
 /* Activity timeline */
@@ -642,9 +725,9 @@ img { display: block; max-width: 100%; }
 .friends-activity-list { display: flex; flex-direction: column; }
 .friends-activity-item {
   display: grid;
-  grid-template-columns: 1fr 100px;
-  gap: 20px;
-  padding: 20px 0;
+  grid-template-columns: 1fr 72px;
+  gap: 16px;
+  padding: 14px 0;
   border-bottom: 1px solid var(--nyt-border);
   align-items: start;
 }
@@ -653,9 +736,9 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-family: var(--font-meta);
-  font-size: 12px;
+  font-size: 11px;
 }
 .friends-activity-item .fai-meta .fai-av {
   width: 22px; height: 22px; border-radius: 50%;
@@ -674,28 +757,30 @@ img { display: block; max-width: 100%; }
 .friends-activity-item .fai-meta .who:hover { text-decoration: underline; }
 .friends-activity-item .fai-meta .verb { color: var(--nyt-text-meta); }
 .friends-activity-item .fai-passage {
-  font-family: var(--font-display);
+  font-family: var(--font-subhead);
   font-style: italic;
-  font-size: 14px;
-  line-height: 1.45;
-  background: var(--nyt-highlight);
-  padding: 8px 12px;
-  border-left: 3px solid var(--nyt-highlight-hover);
-  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--nyt-text-light);
+  margin-bottom: 6px;
 }
 .friends-activity-item .fai-note {
   font-family: var(--font-subhead);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--nyt-text-light);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .friends-activity-item .fai-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.2;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   cursor: pointer;
 }
 .friends-activity-item .fai-title:hover { color: var(--nyt-link-hover); }
@@ -713,6 +798,22 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(135deg, #d8d4cf 0%, #8a8580 100%);
   cursor: pointer;
 }
+.friends-show-more {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  font-family: var(--font-subhead);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nyt-blue);
+  background: white;
+  border: 1px solid var(--nyt-border);
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+}
+.friends-show-more:hover { background: var(--nyt-bg-alt); }
 
 .friends-feed {
   display: grid;
@@ -2252,7 +2353,7 @@ const shelves = {
 };
 
 // FOLLOWING — who Aarushi follows (and friend relationships)
-let following = new Set(['bree', 'devin', 'maya', 'theo']);
+let following = new Set(['bree', 'devin', 'maya']);
 
 // REPOSTS — array of { id, userId, articleId, commentary, date }
 let reposts = [
@@ -2294,6 +2395,7 @@ let state = {
   selectedPassage: null,
   pendingRepostArticleId: null,
   friendsFilter: 'all',     // 'all' | 'reposts' | 'highlights'
+  friendsShowAllActivity: false,
 };
 
 const today = "Saturday, May 23, 2026";
@@ -2393,12 +2495,17 @@ function trackRecentlyRead(articleId) {
 function getFollowedReaders() {
   return Array.from(following)
     .map(id => users[id])
-    .filter(u => u && u.type === 'reader');
+    .filter(u => u && u.type === 'reader' && canViewProfileBody(u, false));
 }
 
 function isFollowedReader(userId) {
   const u = users[userId];
-  return !!(u && u.type === 'reader' && following.has(userId));
+  return !!(u && u.type === 'reader' && following.has(userId) && canViewProfileBody(u, false));
+}
+
+function truncateText(text, max) {
+  if (!text || text.length <= max) return text;
+  return text.slice(0, max).trim() + '\u2026';
 }
 
 function renderFriendAv(user, extraClass) {
@@ -2721,13 +2828,30 @@ function renderTopStories() {
    ============================================================ */
 function renderFriendsFeed() {
   const wrap = el('div');
+  const readers = getFollowedReaders();
 
   wrap.appendChild(el('div', { class: 'friends-intro' },
     el('h1', {}, 'Friends'),
     el('div', { class: 'sub' }, 'Reading recommendations from people you follow — always tied to a Times article.')
   ));
 
-  const readers = getFollowedReaders();
+  // — Following (top) —
+  if (readers.length) {
+    const top = el('div', { class: 'friends-following-top' });
+    top.appendChild(el('span', { class: 'label' }, 'People you follow'));
+    const chips = el('div', { class: 'chips' });
+    readers.forEach(u => {
+      chips.appendChild(el('span', {
+        class: 'friend-chip',
+        onclick: () => navigate('profile', { profileId: u.id })
+      },
+        renderFriendAv(u),
+        u.name
+      ));
+    });
+    top.appendChild(chips);
+    wrap.appendChild(top);
+  }
 
   // — One picks —
   const onePicks = readers.filter(u => {
@@ -2758,35 +2882,43 @@ function renderFriendsFeed() {
     wrap.appendChild(section);
   }
 
-  // — Shelf strip —
-  const shelfFriends = readers.filter(u => canViewProfileBody(u, false) && shelves[u.id] && shelfHasContent(shelves[u.id]));
+  // — Friend shelves (inviting cards) —
+  const shelfFriends = readers.filter(u => shelves[u.id] && shelfHasContent(shelves[u.id]) &&
+    canViewShelfSection(u, 'shelf', false));
   if (shelfFriends.length) {
     const section = el('div', { class: 'friends-section' });
     section.appendChild(el('div', { class: 'friends-section-title' }, 'Friend shelves'));
     section.appendChild(el('div', { class: 'friends-section-deck' },
-      'See what each friend is reading and recommending on their profile.'));
+      'Browse what each friend is reading — visit their full shelf on their profile.'));
     const strip = el('div', { class: 'friends-shelf-strip' });
     shelfFriends.forEach(u => {
       const shelf = shelves[u.id];
-      const preview = shelf.onePick
+      const pickArt = shelf.onePick && articles[shelf.onePick.articleId]
+        ? articles[shelf.onePick.articleId]
+        : (shelf.topFive[0] && articles[shelf.topFive[0].articleId] ? articles[shelf.topFive[0].articleId] : null);
+      const pickId = pickArt ? pickArt.id : null;
+      const preview = shelf.onePick && shelf.onePick.note
         ? shelf.onePick.note
-        : (shelf.topFive[0] && articles[shelf.topFive[0].articleId]
-          ? articles[shelf.topFive[0].articleId].title
-          : 'View shelf');
-      strip.appendChild(el('div', { class: 'friends-shelf-card', onclick: () => navigate('profile', { profileId: u.id }) },
-        el('div', { class: 'fsc-top' },
-          renderFriendAv(u, 'fsc-av'),
-          el('div', { class: 'fsc-name' }, u.name)
-        ),
-        el('div', { class: 'fsc-preview' }, preview),
-        el('div', { class: 'fsc-link' }, 'See shelf \u2192')
-      ));
+        : (shelf.topFive[0] && shelf.topFive[0].note ? shelf.topFive[0].note : '');
+      const card = el('div', { class: 'friends-shelf-card', onclick: () => navigate('profile', { profileId: u.id }) });
+      const coverWrap = el('div', { class: 'fsc-cover-wrap' });
+      if (pickId) coverWrap.appendChild(el('img', { src: articleImage(pickId), alt: pickArt.title }));
+      coverWrap.appendChild(renderFriendAv(u, 'fsc-av'));
+      card.appendChild(coverWrap);
+      const body = el('div', { class: 'fsc-body' },
+        el('div', { class: 'fsc-shelf-label' }, u.name.split(' ')[0] + '\u2019s shelf'),
+        pickArt ? el('div', { class: 'fsc-pick-title' }, pickArt.title) : null,
+        preview ? el('div', { class: 'fsc-preview' }, preview) : null,
+        el('div', { class: 'fsc-link' }, 'Visit shelf \u2192')
+      );
+      card.appendChild(body);
+      strip.appendChild(card);
     });
     section.appendChild(strip);
     wrap.appendChild(section);
   }
 
-  // — Favorite passages (max 3) —
+  // — Favorite passages —
   const passageItems = [];
   readers.forEach(u => {
     if (!canViewShelfSection(u, 'shelf', false)) return;
@@ -2800,19 +2932,24 @@ function renderFriendsFeed() {
   if (passageItems.length) {
     const section = el('div', { class: 'friends-section' });
     section.appendChild(el('div', { class: 'friends-section-title' }, 'Passages friends keep thinking about'));
+    const block = el('div', { class: 'friends-passages-block' });
     passageItems.slice(0, 3).forEach(({ hl, u }) => {
       const a = articles[hl.articleId];
       if (!a) return;
-      section.appendChild(el('div', { class: 'friends-passage-item', onclick: () => navigate('article', { articleId: a.id }) },
+      block.appendChild(el('div', { class: 'friends-passage-item', onclick: () => navigate('article', { articleId: a.id }) },
         el('div', { class: 'fp-meta' }, u.name.split(' ')[0] + ' highlighted'),
         el('div', { class: 'fp-text' }, '\u201c' + hl.passage + '\u201d'),
-        el('div', { class: 'fp-source' }, 'From \u201c' + a.title + '\u201d')
+        el('div', { class: 'fp-source' },
+          el('span', {}, 'From'),
+          a.title
+        )
       ));
     });
+    section.appendChild(block);
     wrap.appendChild(section);
   }
 
-  // — Activity timeline —
+  // — Recent from friends (cap 5 + show more) —
   const feed = [];
   reposts.forEach(rp => {
     if (isFollowedReader(rp.userId)) feed.push({ kind: 'repost', ...rp });
@@ -2828,7 +2965,7 @@ function renderFriendsFeed() {
     return true;
   });
 
-  const activitySection = el('div', { class: 'friends-section' });
+  const activitySection = el('div', { class: 'friends-section', style: 'border-bottom:none' });
   const activityHeader = el('div', { class: 'friends-activity-header' },
     el('div', { class: 'friends-section-title', style: 'margin-bottom:0' }, 'Recent from friends')
   );
@@ -2836,7 +2973,7 @@ function renderFriendsFeed() {
   [['all', 'All'], ['reposts', 'Reposts'], ['highlights', 'Highlights']].forEach(([id, label]) => {
     filters.appendChild(el('button', {
       class: state.friendsFilter === id ? 'active' : '',
-      onclick: () => { state.friendsFilter = id; render(); }
+      onclick: () => { state.friendsFilter = id; state.friendsShowAllActivity = false; render(); }
     }, label));
   });
   activityHeader.appendChild(filters);
@@ -2847,26 +2984,17 @@ function renderFriendsFeed() {
     list.appendChild(el('div', { class: 'empty-state', style: 'padding:40px 20px' },
       'Nothing here yet from your friends.'));
   } else {
-    filtered.forEach(item => list.appendChild(renderFriendActivityItem(item)));
+    const visible = state.friendsShowAllActivity ? filtered : filtered.slice(0, 5);
+    visible.forEach(item => list.appendChild(renderFriendActivityItem(item)));
+    if (filtered.length > 5 && !state.friendsShowAllActivity) {
+      list.appendChild(el('button', {
+        class: 'friends-show-more',
+        onclick: () => { state.friendsShowAllActivity = true; render(); }
+      }, 'Show more (' + (filtered.length - 5) + ' more)'));
+    }
   }
   activitySection.appendChild(list);
   wrap.appendChild(activitySection);
-
-  // — Following strip (readers only, bottom) —
-  const followingSection = el('div', { class: 'friends-section', style: 'border-bottom:none;padding-bottom:0' });
-  const strip = el('div', { class: 'friends-following-strip', style: 'margin-top:0;padding-top:0;border-top:none' });
-  strip.appendChild(el('span', { class: 'label' }, 'Following'));
-  readers.forEach(u => {
-    strip.appendChild(el('span', {
-      class: 'friend-chip',
-      onclick: () => navigate('profile', { profileId: u.id })
-    },
-      renderFriendAv(u),
-      u.name
-    ));
-  });
-  followingSection.appendChild(strip);
-  wrap.appendChild(followingSection);
 
   return wrap;
 }
@@ -2887,14 +3015,13 @@ function renderFriendActivityItem(item) {
   ));
 
   if (item.kind === 'highlight') {
-    main.appendChild(el('div', { class: 'fai-passage' }, '\u201c' + item.passage + '\u201d'));
-    if (item.note) main.appendChild(el('div', { class: 'fai-note' }, item.note));
+    main.appendChild(el('div', { class: 'fai-passage' },
+      '\u201c' + truncateText(item.passage, 90) + '\u201d'));
   }
   if (item.kind === 'repost' && item.commentary) {
-    main.appendChild(el('div', { class: 'fai-note' }, item.commentary));
+    main.appendChild(el('div', { class: 'fai-note' }, truncateText(item.commentary, 100)));
   }
 
-  main.appendChild(el('div', { class: 'fai-section' }, a.section));
   main.appendChild(el('div', { class: 'fai-title', onclick: () => navigate('article', { articleId: a.id }) }, a.title));
   row.appendChild(main);
 
